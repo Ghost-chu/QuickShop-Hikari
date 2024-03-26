@@ -62,7 +62,7 @@
         <dependency>
             <groupId>com.palmergames.bukkit.towny</groupId>
             <artifactId>towny</artifactId>
-            <version>0.100.1.18</version>
+            <version>0.100.1.23</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
