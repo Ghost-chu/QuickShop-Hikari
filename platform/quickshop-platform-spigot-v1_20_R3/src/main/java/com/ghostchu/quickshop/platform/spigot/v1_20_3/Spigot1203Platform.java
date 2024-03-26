@@ -1,4 +1,4 @@
-package com.ghostchu.quickshop.platform.spigot.v1_20_2;
+package com.ghostchu.quickshop.platform.spigot.v1_20_3;
 
 import com.ghostchu.quickshop.platform.Platform;
 import com.ghostchu.quickshop.platform.Util;
@@ -45,7 +45,11 @@ public class Spigot1203Platform extends AbstractSpigotPlatform implements Platfo
 
     @Override
     public @NotNull String getMinecraftVersion() {
-        return ((CraftServer) Bukkit.getServer()).getServer().getServerVersion();
+        try {
+            return ((CraftServer) Bukkit.getServer()).getServer().getServerVersion();
+        } catch (Exception e) {
+            return super.getMinecraftVersion();
+        }
     }
 
     @Override

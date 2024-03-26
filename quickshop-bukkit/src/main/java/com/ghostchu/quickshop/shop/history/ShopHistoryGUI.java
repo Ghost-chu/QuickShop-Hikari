@@ -4,6 +4,7 @@ import com.ghostchu.quickshop.QuickShop;
 import com.ghostchu.quickshop.ServiceInjector;
 import com.ghostchu.quickshop.api.database.bean.DataRecord;
 import com.ghostchu.quickshop.api.event.ShopHistoryGuiOpenEvent;
+import com.ghostchu.quickshop.api.localization.text.ProxiedLocale;
 import com.ghostchu.quickshop.api.obj.QUser;
 import com.ghostchu.quickshop.api.shop.Shop;
 import com.ghostchu.quickshop.obj.QUserImpl;
@@ -43,14 +44,17 @@ public class ShopHistoryGUI {
     private final Player player;
     private final Shop shop;
     private final SkullProvider skullProvider;
+    private final ProxiedLocale locale;
     private int page = 1;
     private List<ShopHistory.ShopHistoryRecord> queryResult;
     private ShopHistory.ShopSummary summary;
+
 
     public ShopHistoryGUI(QuickShop plugin, Player player, ShopHistory shopHistory) {
         this.plugin = plugin;
         this.shopHistory = shopHistory;
         this.player = player;
+        this.locale = plugin.getTextManager().findRelativeLanguages(player);
         this.shop = shopHistory.shop;
         this.chestGui = new ChestGui(6, plugin.text().of(player, "history.shop.gui-title").legacy());
         this.header = new StaticPane(0, 0, 9, 1);
@@ -161,17 +165,17 @@ public class ShopHistoryGUI {
         ItemStack itemStack = new ItemStack(Material.OAK_SIGN);
         plugin.getPlatform().setDisplayName(itemStack, plugin.text().of(player, "history.shop.summary-icon-title").forLocale());
         List<Component> description = new ArrayList<>();
-        description.add(plugin.text().of(player, "history.shop.total-unique-purchasers", summary.uniquePurchasers()).forLocale());
-        description.add(plugin.text().of(player, "history.shop.recent-purchases", hours(24), summary.recentPurchases24h()).forLocale());
-        description.add(plugin.text().of(player, "history.shop.recent-purchases", days(3), summary.recentPurchases3d()).forLocale());
-        description.add(plugin.text().of(player, "history.shop.recent-purchases", days(7), summary.recentPurchases7d()).forLocale());
-        description.add(plugin.text().of(player, "history.shop.recent-purchases", days(30), summary.recentPurchases30d()).forLocale());
-        description.add(plugin.text().of(player, "history.shop.total-purchases", summary.totalPurchases()).forLocale());
-        description.add(plugin.text().of(player, "history.shop.recent-purchase-balance", hours(24), summary.recentPurchasesBalance24h()).forLocale());
-        description.add(plugin.text().of(player, "history.shop.recent-purchase-balance", days(3), summary.recentPurchasesBalance3d()).forLocale());
-        description.add(plugin.text().of(player, "history.shop.recent-purchase-balance", days(7), summary.recentPurchasesBalance7d()).forLocale());
-        description.add(plugin.text().of(player, "history.shop.recent-purchase-balance", days(30), summary.recentPurchasesBalance30d()).forLocale());
-        description.add(plugin.text().of(player, "history.shop.total-balances", summary.totalBalance()).forLocale());
+        description.add(plugin.text().of(player, "history.shop.total-unique-purchasers", locale.getNumberFormat().format(summary.uniquePurchasers())).forLocale());
+        description.add(plugin.text().of(player, "history.shop.recent-purchases", hours(24), locale.getNumberFormat().format(summary.recentPurchases24h())).forLocale());
+        description.add(plugin.text().of(player, "history.shop.recent-purchases", days(3), locale.getNumberFormat().format(summary.recentPurchases3d())).forLocale());
+        description.add(plugin.text().of(player, "history.shop.recent-purchases", days(7), locale.getNumberFormat().format(summary.recentPurchases7d())).forLocale());
+        description.add(plugin.text().of(player, "history.shop.recent-purchases", days(30), locale.getNumberFormat().format(summary.recentPurchases30d())).forLocale());
+        description.add(plugin.text().of(player, "history.shop.total-purchases", locale.getNumberFormat().format(summary.totalPurchases())).forLocale());
+        description.add(plugin.text().of(player, "history.shop.recent-purchase-balance", hours(24), locale.getNumberFormat().format(summary.recentPurchasesBalance24h())).forLocale());
+        description.add(plugin.text().of(player, "history.shop.recent-purchase-balance", days(3), locale.getNumberFormat().format(summary.recentPurchasesBalance3d())).forLocale());
+        description.add(plugin.text().of(player, "history.shop.recent-purchase-balance", days(7), locale.getNumberFormat().format(summary.recentPurchasesBalance7d())).forLocale());
+        description.add(plugin.text().of(player, "history.shop.recent-purchase-balance", days(30), locale.getNumberFormat().format(summary.recentPurchasesBalance30d())).forLocale());
+        description.add(plugin.text().of(player, "history.shop.total-balances", locale.getNumberFormat().format(summary.totalBalance())).forLocale());
 
         plugin.getPlatform().setLore(itemStack, description);
         return itemStack;

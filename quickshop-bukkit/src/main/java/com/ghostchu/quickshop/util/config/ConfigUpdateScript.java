@@ -19,6 +19,12 @@ public class ConfigUpdateScript {
         this.config = config;
         this.plugin = plugin;
     }
+
+    @UpdateScript(version = 1028)
+    public void configCleanup_1028() {
+        getConfig().set("chat-type", null);
+        getConfig().set("server-platform", null);
+    }
     @UpdateScript(version = 1027)
     public void sqlSectionOptimization() {
         long connectionTimeoutOld = getConfig().getLong("database.properties.connection-timeout", 60000);

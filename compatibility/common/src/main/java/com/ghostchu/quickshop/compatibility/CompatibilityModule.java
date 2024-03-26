@@ -15,6 +15,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,7 +40,8 @@ public abstract class CompatibilityModule extends JavaPlugin implements Listener
                 }
             }
         }
-        return shopsList;
+        BoundingBox boundingBox = new BoundingBox(minX, Integer.MIN_VALUE, minZ, maxX, Integer.MAX_VALUE, maxZ);
+        return shopsList.stream().filter(s -> boundingBox.contains(s.getLocation().toVector())).toList();
     }
 
     public List<Shop> getShops(@NotNull String worldName, int chunkX, int chunkZ) {

@@ -13,14 +13,24 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Supplier;
 
 public class BukkitInventoryWrapper implements InventoryWrapper {
     private final Inventory inventory;
     private final InventoryWrapperManager manager;
+    private final Supplier<String> eigenCodeProvider;
+    private final String eigenCode;
 
     public BukkitInventoryWrapper(@NotNull Inventory inventory) {
+        this(inventory, () -> null);
+    }
+
+    public BukkitInventoryWrapper(@NotNull Inventory inventory, Supplier<String> eigenCodeProvider) {
         this.inventory = inventory;
         this.manager = QuickShop.getInstance().getInventoryWrapperManager();
+        this.eigenCodeProvider = eigenCodeProvider;
+        this.eigenCode = eigenCodeProvider.get();
     }
 
     @Override
@@ -75,6 +85,11 @@ public class BukkitInventoryWrapper implements InventoryWrapper {
         } else {
             return this.inventory instanceof InventoryHolder;
         }
+    }
+
+    @Override
+    public boolean isNeedUpdate() {
+        return Objects.equals(eigenCode, eigenCodeProvider.get());
     }
 
     @Override

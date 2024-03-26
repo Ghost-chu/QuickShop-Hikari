@@ -99,6 +99,11 @@ public class EnderChestWrapper implements InventoryWrapper {
     }
 
     @Override
+    public boolean isNeedUpdate() {
+        return false;
+    }
+
+    @Override
     public boolean restoreSnapshot(@NotNull ItemStack[] snapshot) {
         player.getEnderChest().setContents(snapshot);
         return true;

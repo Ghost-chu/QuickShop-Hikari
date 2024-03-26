@@ -1,5 +1,6 @@
 package com.ghostchu.quickshop.platform;
 
+import com.vdurmont.semver4j.Semver;
 import de.tr7zw.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -32,6 +33,17 @@ public interface Platform {
 
     @Nullable Component getDisplayName(@NotNull ItemMeta meta);
 
+    default @NotNull String getMinecraftVersion() {
+        // 1.20.4-R0.1-SNAPSHOT
+        String versionString = Bukkit.getServer().getBukkitVersion();
+        Semver semver = new Semver(versionString, Semver.SemverType.LOOSE);
+        if (semver.getPatch() == null) {
+            return semver.getMajor() + "." + semver.getMinor();
+        } else {
+            return semver.getMajor() + "." + semver.getMinor() + "." + semver.getPatch();
+        }
+    }
+
     @Nullable
     default String getItemShopId(@NotNull ItemStack stack) {
         if (!Bukkit.getPluginManager().isPluginEnabled("NBTAPI")) {
@@ -52,8 +64,6 @@ public interface Platform {
     @Nullable List<Component> getLore(@NotNull ItemStack stack);
 
     @Nullable List<Component> getLore(@NotNull ItemMeta meta);
-
-    @NotNull String getMinecraftVersion();
 
     @NotNull Component getTranslation(@NotNull Material material);
 

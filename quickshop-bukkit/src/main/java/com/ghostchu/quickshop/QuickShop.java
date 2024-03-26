@@ -28,13 +28,10 @@ import com.ghostchu.quickshop.command.SimpleCommandManager;
 import com.ghostchu.quickshop.common.util.CommonUtil;
 import com.ghostchu.quickshop.common.util.JsonUtil;
 import com.ghostchu.quickshop.common.util.QuickExecutor;
-import com.ghostchu.quickshop.common.util.Timer;
 import com.ghostchu.quickshop.database.DatabaseIOUtil;
 import com.ghostchu.quickshop.database.HikariUtil;
 import com.ghostchu.quickshop.database.SimpleDatabaseHelperV2;
-import com.ghostchu.quickshop.economy.Economy_GemsEconomy;
-import com.ghostchu.quickshop.economy.Economy_TNE;
-import com.ghostchu.quickshop.economy.Economy_Vault;
+import com.ghostchu.quickshop.economy.*;
 import com.ghostchu.quickshop.listener.*;
 import com.ghostchu.quickshop.localization.text.SimpleTextManager;
 import com.ghostchu.quickshop.metric.MetricListener;
@@ -580,7 +577,6 @@ public class QuickShop implements QuickShopAPI, Reloadable {
     }
 
     public final void onEnable() {
-        Timer enableTimer = new Timer(true);
         logger.info("QuickShop " + javaPlugin.getFork());
         registerService();
         /* Check the running envs is support or not. */
@@ -590,7 +586,7 @@ public class QuickShop implements QuickShopAPI, Reloadable {
         }
         logger.info("Reading the configuration...");
         initConfiguration();
-        logger.info("Developers: {}", CommonUtil.list2String(javaPlugin.getDescription().getAuthors()));
+        logger.info("Contributors: {}", CommonUtil.list2String(javaPlugin.getDescription().getAuthors()));
         logger.info("Original author: Netherfoam, Timtower, KaiNoMood, sandtechnology");
         logger.info("Let's start loading the plugin");
         loadErrorReporter();
@@ -660,7 +656,6 @@ public class QuickShop implements QuickShopAPI, Reloadable {
         try (PerfMonitor ignored = new PerfMonitor("Self Test")) {
             runtimeCheck(EnvCheckEntry.Stage.AFTER_ON_ENABLE);
         }
-        logger.info("QuickShop Loaded! " + enableTimer.stopAndGetTimePassed() + " ms.");
 
     }
 
@@ -1128,6 +1123,8 @@ public class QuickShop implements QuickShopAPI, Reloadable {
                 case VAULT -> loadVault();
                 case GEMS_ECONOMY -> loadGemsEconomy();
                 case TNE -> loadTNE();
+                case COINS_ENGINE -> loadCoinsEngine();
+                case TREASURY -> loadTreasury();
                 default -> null;
             };
             abstractEconomy = ServiceInjector.getInjectedService(AbstractEconomy.class, abstractEconomy);
@@ -1142,6 +1139,14 @@ public class QuickShop implements QuickShopAPI, Reloadable {
             parent.logger().info("Selected economy bridge: {}", abstractEconomy.getName());
             parent.economy = abstractEconomy;
             return true;
+        }
+
+        private AbstractEconomy loadTreasury() {
+            return new Economy_Treasury(parent);
+        }
+
+        private AbstractEconomy loadCoinsEngine() {
+            return new Economy_CoinsEngine(parent);
         }
 
         // Vault may create exception, we need catch it.

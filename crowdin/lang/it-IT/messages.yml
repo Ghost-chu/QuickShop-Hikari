@@ -51,7 +51,7 @@ quick-fill:
   header: '<yellow>You have multiple shops with name "<green>{0}<yellow>", choose one to continue:'
   entry-normal: ' <yellow>- <aqua>{0} <light_purple>{1}'
   entry-cooperation: ' <yellow>- <red>[co] <aqua>{0} <light_purple>{1}'
-3rd-plugin-build-check-failed-admin: '<gray>(AdminOnly) <light_purple>{0}<dark_gray> ha negato il controllo dei permessi. Se ciò non era previsto, si prega di aggiungere <light_purple>{1}<gray> alla lista nera degli ascoltatori. <gray>Guida di configurazione: https://github.com/Ghost-chu/QuickShop-Hikari/wiki/Use-protection-listener-filter'
+3rd-plugin-build-check-failed-admin: '<gray>(AdminOnly) <light_purple>{0}<dark_gray> denied the permission checks. If this not expected, try adding <light_purple>{1} <gray>to the listener blacklist. Configuration Guide:https://ghost-chu.github.io/QuickShop-Hikari-Documents/docs/modules/shops/protection-checker'
 average-price-nearby: '<green>Prezzo medio nelle vicinanze: <yellow>{0}'
 inventory-check-global-alert: "<red>[Inventory Check] <gray>Warning! Found a QuickShop display item <gold>{2}</gold> in inventory at <aqua>{0}</aqua> <dark_gray>[{1}]</dark_gray>, which it shouldn't happened, This usually means that someone is maliciously exploiting the exploit to duplicating the display item."
 digits-reach-the-limit: <red>Hai raggiunto i limiti dei decimali nel prezzo.
@@ -174,8 +174,8 @@ unknown-player: <red>Il giocatore di destinazione non esiste, per favore control
 player-offline: <red>Il giocatore scelto è attualmente offline.
 player-profile-format: <aqua>{0}</aqua><gold>(<yellow>{1}</yellow>)</gold>
 shop-type:
-  selling: SELLING
-  buying: BUYING
+  selling: VENDITA
+  buying: ACQUISTA
 language:
   qa-issues: '<yellow>Problemi di garanzia della qualità: <aqua>{0}%'
   code: '<yellow>Codice: <gold>{0}'
@@ -203,7 +203,7 @@ updatenotify:
     papermc: '[PaperMC]'
     bukkitdev: '[BukkitDev]'
     polymart: '[Polymart]'
-    modrinth: '[Modrinth]'
+    modrinth: 'Modrinth'
     basic: '[Basic]'
   list:
     - '{0} è stato rilasciato. Stai ancora usando {1}!'
@@ -362,38 +362,38 @@ controlpanel:
   empty-hover: <yellow>Clicca per cancellare l'inventario del negozio.
   toggledisplay: '<green>Display-Item: <aqua>{0} <yellow>[<light_purple><bold>Toggle</bold></light_purple>]'
   history: '<green>History: <yellow>[<bold><light_purple>View</light_purple></bold>]</yellow>'
-  history-hover: <yellow>Click to view shop history logs
+  history-hover: <yellow>Clicca per visualizzare i log della cronologia del negozio
 timeunit:
   behind: dietro
-  week: "{0} week"
-  weeks: "{0} weeks"
-  year: "{0} year"
+  week: "{0} settimana"
+  weeks: "{0} settimane"
+  year: "{0} anno"
   before: prima
   scheduled: pianificato
-  years: "{0} years"
-  scheduled-in: scheduled in {0}
-  second: "{0} second"
-  std-past-format: '{5}{4}{3}{2}{1}{0}ago'
-  std-time-format: HH:mm:ss
-  seconds: "{0} seconds"
-  hour: "{0} hour"
-  scheduled-at: scheduled at {0}
+  years: "{0} anni"
+  scheduled-in: pianificata in {0}
+  second: "{0} secondo"
+  std-past-format: '{5}{4}{3}{2}{1}{0}fa'
+  std-time-format: H:mm:ss
+  seconds: "{0} secondi"
+  hour: "{0} ora"
+  scheduled-at: pianificata in {0}
   after: dopo
-  day: "{0} day"
+  day: "{0} giorno"
   recent: recente
   between: compreso tra
-  hours: "{0} hours"
-  months: "{0} months"
+  hours: "{0} ore"
+  months: "{0} mesi"
   longtimeago: molto tempo fa
-  between-format: between {0} and {1}
-  minutes: "{0} minutes"
+  between-format: tra {0} e {1}
+  minutes: "{0} minuti"
   justnow: in questo momento
-  minute: "{0} minute"
-  std-format: MM/dd/yyyy HH:mm:ss
+  minute: "{0} minuto"
+  std-format: dd/MM/yyyy HH:mm:ss
   future-plain-text: futuro
-  month: "{0} month"
+  month: "{0} mese"
   future: in {0}
-  days: "{0} days"
+  days: "{0} giorni"
 command:
   reloading: '<green>Configuration reloaded. <yellow>Some changes may require reboot to affect. <newline><gray>(Notice: Reloading behavior has been changed after 4.0.9.10, we now only reload configuration but not whole plugin to ensure the server won''t crashed.)'
   description:
@@ -432,18 +432,20 @@ command:
     unban: <yellow>Sbannato il giocatore dal negozio
     transfer: <yellow>Trasferisci tutti i negozi di qualcuno ad un altro player
     transferall: <yellow>Trasferisci tutti i negozi di qualcuno ad un altro player
-    transferownership: <yellow>Transfer the shop you're looking at to someone else
+    transferownership: <yellow>Trasferisci a qualcun altro il negozio che stai guardando
     size: <yellow>Modifica per importo all'ingrosso di un negozio
     supercreate: <yellow>Crea un negozio aggirando tutti i controlli di protezione
     taxaccount: <yellow>Imposta la tassa utilizzata dal negozio
     name: <yellow>Naming a shop to specific name
     toggledisplay: <yellow>Attiva/disattiva lo stato dell'articolo di visualizzazione del negozio
-    permission: <yellow>Shop permission management
-    lookup: <yellow>Manage lookup-able items table
+    permission: <yellow>Gestione autorizzazioni negozio
+    lookup: <yellow>Gestisce la tabella degli elementi ricercati
     database: <yellow>View and maintain QuickShop database
-    benefit: <yellow>Settings of divide benefits between shop owner and other players
-    tag: <yellow>Add, remove or query tags of a shop
-    suggestprice: <yellow>Suggest a recommend price for looking shop, based on other shops
+    benefit: <yellow>Impostazioni per dividere i benefici tra il proprietario del negozio e gli altri giocatori
+    tag: <yellow>Aggiungi, rimuovi o interroga i tag di un negozio
+    suggestprice: <yellow>Suggerisci un prezzo consigliato per cercare negozio, basato su altri negozi
+    history: <yellow>View the history transactions of a shop
+    sign: <yellow>Change the sign material of a shop
   bulk-size-not-set: '<red>Utilizza: /qs size <amount>'
   no-type-given: '<red>Utilizza: /qs find <item>'
   feature-not-enabled: Questa funzione non è abilitata nel file di configurazione.
@@ -496,18 +498,18 @@ shop-cannot-trade-when-freezing: <red>Non puoi interagire con questo negozio per
 invalid-container: <red>Container non valido, puoi creare uno shop soltanto su un blocco che hai nell'inventario.
 permission:
   header: Dettagli dei Permessi del Negozio
-  header-player: <green>Shop Permission Details for {0}
-  header-group: <green>Shop Permission Details for group {0}
+  header-player: <green>Dettagli permessi del negozio per {0}
+  header-group: <green>Dettagli permessi del negozio per il gruppo {0}
   table: <gold><b>{0}</b>:</gold> <gray>{1}</gray>
   item:
     purchase: <yellow>Permission to allow users who have this to purchase the shop. (including buying and selling)
-    show-information: <yellow>Permission to allow users who have this to see the shop information. (open shop info panel)
-    preview-shop: <yellow>Permission to allow users who have this to preview the shop. (preview item)
+    show-information: <yellow>Permesso di consentire agli utenti che hanno questo permesso di vedere le informazioni del negozio. (aprire l'info panel del negozio)
+    preview-shop: <yellow>Consenti agli utenti che hanno questo permesso di visualizzare in anteprima il negozio. (elemento di anteprima)
     search: <yellow>Permission to allow users who have this to search the target shop. (remove permission will hide shop from search result)
-    delete: <yellow>Permission to allow users who have this to delete the shop.
+    delete: <yellow>Consenti agli utenti che hanno questo permesso, di eliminare il negozio.
     receive-alert: <yellow>Permission to allow users who have this to receive alert message (e.g out-of-stock or new trade).
-    access-inventory: <yellow>Permission to allow users who have this to access the shop inventory.
-    ownership-transfer: <yellow>Permission to allow users who have this to transfer the shop ownership.
+    access-inventory: <yellow>Consenti agli utenti che hanno questo permesso, di avere accesso all'inventario del negozio.
+    ownership-transfer: <yellow>Consenti agli utenti che hanno questo permesso di trasferire la proprietà del negozio.
     management-permission: <yellow>Permission to allow users who have this to manage the groups permissions and edit user's group.
     toggle-display: <yellow>Permesso per consentire agli utenti scelti di attivare gli oggetti in mostra del negozio.
     set-shoptype: <yellow>Permesso per consentire agli utenti scelti di scegliere il tipo di negozio (cambiare ad acquisto o vendita).
@@ -516,8 +518,8 @@ permission:
     set-stack-amount: <yellow>Permesso per consentire agli utenti scelti d'impostare la quantità del carico del negozio.
     set-currency: <yellow>Permesso per consentire agli utenti scelti d'impostare la valuta del negozio.
     set-name: <yellow>Permesso per consentire agli utenti scelti di impostare il nome del negozio.
-    set-sign-type: <yellow>Change the sign material that attached on the shop.
-    view-purchase-logs: <yellow>Permission to view shop purchase logs.
+    set-sign-type: <yellow>Cambia il materiale del cartello del negozio.
+    view-purchase-logs: <yellow>Permesso di visualizzare i log di acquisto del negozio.
   group:
     everyone: <yellow>Gruppo predefinito per tutti gli utenti eccetto il proprietario del negozio.
     staff: <yellow>Gruppo di sistema per il personale del negozio.
@@ -556,15 +558,15 @@ argument-cannot-be: <red>The argument <aqua>{0}</aqua> cannot be <yellow>{1}</ye
 argument-must-between: <red>The argument <aqua>{0}</aqua> value must between <yellow>{1}</yellow> and <yellow>{2}</yellow>
 invalid-percentage: <red>Percentage invalid, you must add '%' after the number of percentage.
 display-fallback: |-
-  <red>Due to an internal failure, a fallback message is being displayed.
-  The value of this item may not be localized or processed correctly.
-  Please contact the server administrator.
+  <red>A causa di un errore interno, viene visualizzato un messaggio di fallback.
+  Il valore di questo elemento potrebbe non essere localizzato o elaborato correttamente.
+  Si prega di contattare l'amministratore del server.
 not-a-valid-time: |-
   <red>The string <yellow>{0}</yellow> not a valid timestamp, please enter a <aqua>Zulu Time (ISO 8601)</aqua> or <aqua>Unix Epoch Time in seconds</aqua>.
   <gold>Valid timestamp example: (for Sat, 17 Dec 2022 10:31:37 GMT)</gold>
   <aqua>-<aqua> <yellow>2022-12-17T10:31:37Z</yellow> <grey>(Zulu Time)</grey>
   <aqua>-<aqua> <yellow>1671273097</yellow> <grey>(Unix Epoch Time in seconds)</grey>
-invalid-past-time: <red>You can't specify a time in the past.
+invalid-past-time: <red>Non è possibile specificare un'ora nel passato.
 debug:
   arguments-invalid: <red>Argomenti forniti <yellow>{0}</yellow> non validi.
   sign-located: '<green>Segno valido: <yellow>{0}</yellow>.'
@@ -581,9 +583,9 @@ debug:
   sql-completed: <green>Completato, {0} righe affette.
   sql-exception: <red>Si è verificato un errore durante l'esecuzione della query SQL, controlla la Console per ulteriori dettagli!
   sql-disabled: '<red>Per ragioni di sicurezza, le query SQL sono disabilitate su questo server. Se hai davvero bisogno di questa funzione, puoi aggiungere il seguente flag a questi argomenti di avvio: <aqua>{0}</aqua> con il valore `true` per attivarlo.'
-  force-shop-reload: <yellow>Forcing reload all loaded shops...
-  force-shop-reload-complete: <green>Forced <aqua>{0}</aqua> shops to be reloaded.
-  force-shop-loader-reload: <yellow>Forcing shop-loader reloading...
+  force-shop-reload: <yellow>Forzando il reload di tutti i negozi caricati...
+  force-shop-reload-complete: <green>Forzato<aqua>{0}</aqua> il reload di tutti i negozi.
+  force-shop-loader-reload: <yellow>Forzando il reload...
   force-shop-loader-reload-unloading-shops: <yellow>Unloading <aqua>{0}</aqua> loaded shops...
   force-shop-loader-reload-unloading-shops-from-memory: <yellow>Removing <aqua>{0}</aqua> shops from memory...
   force-shop-loader-reload-reloading-shop-loader: <yellow>Re-calling shop-loader for reloading all shops from database...
@@ -650,7 +652,8 @@ transferall-ask: |-
   <gold>Type <red>/quickshop transferall accept</red> to accept or <red>/quickshop transferall deny</red> to deny.
   The request will expire after <red>{0}</red> seconds.
 transfer-single-ask: |-
-  <gold>Type <red>/qs transfer accept</red> to accept.</gold><newline><gold>Type <red>/qs transfer deny</red> to deny.</gold><newline><gold>Request will expire after <red>{0}</red> seconds.
+  <gold>Type <red>/quickshop transferownership accept</red> to accept or <red>/quickshop transferownership deny</red> to deny.
+  The request will expire after <red>{0}</red> seconds.
 transfer-accepted-fromside: <green>Player <aqua>{0}</aqua> accepted your shop transfer request.
 transfer-accepted-toside: <green>You accepted <aqua>{0}</aqua>'s transfer request.
 transfer-rejected-fromside: <red>Player <aqua>{0}</aqua> rejected your shop transfer request.
@@ -1310,7 +1313,7 @@ addon:
     invalid-usage-restriction: <red>The usage restriction <yellow>{0}</yellow> are invalid.
     invalid-threshold-restriction: <red>The threshold restriction <yellow>{0}</yellow> are invalid.
     invalid-effect-scope: <red>The scope <yellow>{0}</yellow> are invalid.
-    invalid-expire-time: <red>You can't specify a time in the past.
+    invalid-expire-time: <red>Non è possibile specificare un'ora nel passato.
     invalid-discount-rate: <red>The discount rate <yellow>{0}</yellow> are invalid, it can be a fixed number or percentage.
     discount-code-expired: <red>Ouch! Your discount code <yellow>{0}</yellow> has been expired!
     discount-code-installed: <green>You have installed discount code <gold>{0}</gold>, the discount code will be automatically applied to the available purchase in all the following purchases during this session. To uninstall discount code, execute <aqua>/qs discount uninstall {0}</aqua>.

@@ -47,7 +47,11 @@ public class Spigot1191Platform extends AbstractSpigotPlatform implements Platfo
 
     @Override
     public @NotNull String getMinecraftVersion() {
-        return ((CraftServer) Bukkit.getServer()).getServer().getServerVersion();
+        try {
+            return ((CraftServer) Bukkit.getServer()).getServer().getServerVersion();
+        } catch (Exception e) {
+            return super.getMinecraftVersion();
+        }
     }
 
     @Override

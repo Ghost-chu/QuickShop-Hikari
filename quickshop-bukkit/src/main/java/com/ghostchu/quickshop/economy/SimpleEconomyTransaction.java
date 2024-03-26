@@ -7,6 +7,7 @@ import com.ghostchu.quickshop.api.economy.EconomyTransaction;
 import com.ghostchu.quickshop.api.economy.operation.DepositEconomyOperation;
 import com.ghostchu.quickshop.api.economy.operation.WithdrawEconomyOperation;
 import com.ghostchu.quickshop.api.event.EconomyTransactionEvent;
+import com.ghostchu.quickshop.api.obj.QUser;
 import com.ghostchu.quickshop.api.operation.Operation;
 import com.ghostchu.quickshop.common.util.CalculateUtil;
 import com.ghostchu.quickshop.common.util.JsonUtil;
@@ -32,9 +33,9 @@ public class SimpleEconomyTransaction implements EconomyTransaction {
     private final QuickShop plugin = QuickShop.getInstance();
     private final Deque<Operation> processingStack = new LinkedList<>();
     @Nullable
-    private Object from;
+    private QUser from;
     @Nullable
-    private Object to;
+    private QUser to;
     private double amount;
     @NotNull
     @JsonUtil.Hidden
@@ -42,7 +43,7 @@ public class SimpleEconomyTransaction implements EconomyTransaction {
     private double amountAfterTax;
     private double tax;
     @Nullable
-    private Object taxer;
+    private QUser taxer;
     private boolean allowLoan;
     private World world;
     @Nullable
@@ -66,7 +67,7 @@ public class SimpleEconomyTransaction implements EconomyTransaction {
      */
 
     @Builder
-    public SimpleEconomyTransaction(@Nullable Object from, @Nullable Object to, double amount, double taxModifier, @Nullable Object taxAccount, EconomyCore core, Boolean allowLoan, @NotNull World world, @Nullable String currency, boolean neverFail, @Nullable Benefit benefit) {
+    public SimpleEconomyTransaction(@Nullable QUser from, @Nullable QUser to, double amount, double taxModifier, @Nullable QUser taxAccount, EconomyCore core, Boolean allowLoan, @NotNull World world, @Nullable String currency, boolean neverFail, @Nullable Benefit benefit) {
         this.from = from;
         this.to = to;
         this.core = core == null ? QuickShop.getInstance().getEconomy() : core;
@@ -75,6 +76,9 @@ public class SimpleEconomyTransaction implements EconomyTransaction {
         this.allowLoan = Objects.requireNonNullElseGet(allowLoan, () -> plugin.getConfig().getBoolean("shop.allow-economy-loan", false));
         this.world = world;
         this.currency = currency;
+        if (this.currency == null) {
+            this.currency = plugin.getCurrency();
+        }
         this.benefit = benefit;
         if (this.benefit == null) {
             this.benefit = new SimpleBenefit();
@@ -92,50 +96,6 @@ public class SimpleEconomyTransaction implements EconomyTransaction {
         new EconomyTransactionEvent(this).callEvent();
     }
 
-    public interface SimpleTransactionCallback extends TransactionCallback {
-        /**
-         * Calling while Transaction commit
-         *
-         * @param economyTransaction Transaction
-         * @return Does commit event has been cancelled
-         */
-        default boolean onCommit(@NotNull SimpleEconomyTransaction economyTransaction) {
-            return true;
-        }
-
-        /**
-         * Calling while Transaction commit failed
-         * Use EconomyTransaction#getLastError() to getting reason
-         * Use EconomyTransaction#getSteps() to getting the fail step
-         *
-         * @param economyTransaction Transaction
-         */
-        default void onFailed(@NotNull SimpleEconomyTransaction economyTransaction) {
-            Log.transaction(Level.WARNING, "Transaction failed: " + economyTransaction.getLastError() + ", transaction: " + economyTransaction);
-        }
-
-        /**
-         * Calling while Transaction commit successfully
-         *
-         * @param economyTransaction Transaction
-         */
-        default void onSuccess(@NotNull SimpleEconomyTransaction economyTransaction) {
-            Log.transaction("Transaction succeed: " + economyTransaction);
-        }
-
-        /**
-         * Calling while Tax processing failed
-         * Use EconomyTransaction#getLastError() to getting reason
-         * Use EconomyTransaction#getSteps() to getting the fail step
-         *
-         * @param economyTransaction Transaction
-         */
-        default void onTaxFailed(@NotNull SimpleEconomyTransaction economyTransaction) {
-            Log.transaction(Level.WARNING, "Tax Transaction failed: " + economyTransaction.getLastError() + ", transaction: " + economyTransaction);
-        }
-
-    }
-
     /**
      * Checks this transaction can be finished
      *
@@ -147,8 +107,13 @@ public class SimpleEconomyTransaction implements EconomyTransaction {
     }
 
     @Override
-    public @Nullable Object getFrom() {
+    public @Nullable QUser getFrom() {
         return from;
+    }
+
+    @Override
+    public void setFrom(@Nullable QUser from) {
+        this.from = from;
     }
 
     /**
@@ -185,7 +150,7 @@ public class SimpleEconomyTransaction implements EconomyTransaction {
             // Process benefit deposit
             Log.transaction("Benefit processing per-player...");
             double payout = 0d;
-            for (Map.Entry<UUID, Double> entry : benefit.getRegistry().entrySet()) {
+            for (Map.Entry<QUser, Double> entry : benefit.getRegistry().entrySet()) {
                 payout += entry.getValue();
                 Log.transaction("Benefit for " + entry.getKey() + ", value: " + entry.getValue() + ". Payout = " + payout);
                 if (!this.executeOperation(new DepositEconomyOperation(entry.getKey(), amountAfterTax * entry.getValue(), world, currency, core))) {
@@ -213,19 +178,13 @@ public class SimpleEconomyTransaction implements EconomyTransaction {
         return true;
     }
 
-
     @Override
-    public void setFrom(@Nullable Object from) {
-        this.from = from;
-    }
-
-    @Override
-    public @Nullable Object getTo() {
+    public @Nullable QUser getTo() {
         return to;
     }
 
     @Override
-    public void setTo(@Nullable Object to) {
+    public void setTo(@Nullable QUser to) {
         this.to = to;
     }
 
@@ -275,12 +234,12 @@ public class SimpleEconomyTransaction implements EconomyTransaction {
     }
 
     @Override
-    public @Nullable Object getTaxer() {
+    public @Nullable QUser getTaxer() {
         return taxer;
     }
 
     @Override
-    public void setTaxer(@Nullable Object taxer) {
+    public void setTaxer(@Nullable QUser taxer) {
         this.taxer = taxer;
     }
 
@@ -423,6 +382,50 @@ public class SimpleEconomyTransaction implements EconomyTransaction {
             this.lastError = "Failed to execute operation: " + core.getLastError() + "; Operation: " + operation;
             return false;
         }
+    }
+
+    public interface SimpleTransactionCallback extends TransactionCallback {
+        /**
+         * Calling while Transaction commit
+         *
+         * @param economyTransaction Transaction
+         * @return Does commit event has been cancelled
+         */
+        default boolean onCommit(@NotNull SimpleEconomyTransaction economyTransaction) {
+            return true;
+        }
+
+        /**
+         * Calling while Transaction commit failed
+         * Use EconomyTransaction#getLastError() to getting reason
+         * Use EconomyTransaction#getSteps() to getting the fail step
+         *
+         * @param economyTransaction Transaction
+         */
+        default void onFailed(@NotNull SimpleEconomyTransaction economyTransaction) {
+            Log.transaction(Level.WARNING, "Transaction failed: " + economyTransaction.getLastError() + ", transaction: " + economyTransaction);
+        }
+
+        /**
+         * Calling while Transaction commit successfully
+         *
+         * @param economyTransaction Transaction
+         */
+        default void onSuccess(@NotNull SimpleEconomyTransaction economyTransaction) {
+            Log.transaction("Transaction succeed: " + economyTransaction);
+        }
+
+        /**
+         * Calling while Tax processing failed
+         * Use EconomyTransaction#getLastError() to getting reason
+         * Use EconomyTransaction#getSteps() to getting the fail step
+         *
+         * @param economyTransaction Transaction
+         */
+        default void onTaxFailed(@NotNull SimpleEconomyTransaction economyTransaction) {
+            Log.transaction(Level.WARNING, "Tax Transaction failed: " + economyTransaction.getLastError() + ", transaction: " + economyTransaction);
+        }
+
     }
 
 

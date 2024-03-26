@@ -23,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,7 +49,10 @@ public abstract class AbstractSpigotPlatform implements Platform {
     }
 
     @NotNull
+    @ApiStatus.Internal
+    @Deprecated
     public static String getNMSVersion() {
+        // Should only works on Spigot, Paper are breaking this, do not use if possible
         String name = Bukkit.getServer().getClass().getPackage().getName();
         return name.substring(name.lastIndexOf('.') + 1);
     }

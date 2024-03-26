@@ -1,24 +1,28 @@
 package com.ghostchu.quickshop.economy;
 
+import com.ghostchu.quickshop.QuickShop;
 import com.ghostchu.quickshop.api.economy.Benefit;
+import com.ghostchu.quickshop.api.obj.QUser;
 import com.ghostchu.quickshop.common.util.JsonUtil;
+import com.ghostchu.quickshop.common.util.QuickExecutor;
+import com.ghostchu.quickshop.obj.QUserImpl;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class SimpleBenefit implements Benefit {
-    private final Map<UUID, Double> benefits;
+    private final Map<QUser, Double> benefits;
 
     public SimpleBenefit() {
         this.benefits = new HashMap<>();
     }
 
-    public SimpleBenefit(Map<UUID, Double> benefits) {
+    public SimpleBenefit(Map<QUser, Double> benefits) {
         this.benefits = benefits;
     }
 
@@ -27,9 +31,14 @@ public class SimpleBenefit implements Benefit {
         if (StringUtils.isEmpty(json)) {
             return new SimpleBenefit();
         }
-        Map<UUID, Double> map = JsonUtil.regular().fromJson(json, new TypeToken<Map<UUID, Double>>() {
+        Map<String, Double> map = JsonUtil.regular().fromJson(json, new TypeToken<Map<String, Double>>() {
         }.getType());
-        return new SimpleBenefit(map);
+        Map<QUser, Double> parsed = new LinkedHashMap<>();
+        for (Map.Entry<String, Double> e : map.entrySet()) {
+            QUser qUser = QUserImpl.deserialize(QuickShop.getInstance().getPlayerFinder(), e.getKey(), QuickExecutor.getSecondaryProfileIoExecutor());
+            parsed.put(qUser, e.getValue());
+        }
+        return new SimpleBenefit(parsed);
     }
 
     @Override
@@ -51,7 +60,7 @@ public class SimpleBenefit implements Benefit {
     }
 
     @Override
-    public void addBenefit(@NotNull UUID player, double benefit) throws BenefitOverflowException, BenefitExistsException {
+    public void addBenefit(@NotNull QUser player, double benefit) throws BenefitOverflowException, BenefitExistsException {
         double overflow = getOverflow(benefit);
         if (overflow != 0) {
             throw new BenefitOverflowException(overflow);
@@ -63,18 +72,22 @@ public class SimpleBenefit implements Benefit {
     }
 
     @Override
-    public void removeBenefit(@NotNull UUID player) {
+    public void removeBenefit(@NotNull QUser player) {
         benefits.remove(player);
     }
 
     @Override
-    public @NotNull Map<UUID, Double> getRegistry() {
+    public @NotNull Map<QUser, Double> getRegistry() {
         return new HashMap<>(this.benefits);
     }
 
     @NotNull
     @Override
     public String serialize() {
-        return JsonUtil.regular().toJson(this.benefits);
+        Map<String, Double> map = new LinkedHashMap<>();
+        for (Map.Entry<QUser, Double> e : this.benefits.entrySet()) {
+            map.put(e.getKey().serialize(), e.getValue());
+        }
+        return JsonUtil.regular().toJson(map);
     }
 }

@@ -1,6 +1,7 @@
 package com.ghostchu.quickshop.api.economy.operation;
 
 import com.ghostchu.quickshop.api.economy.EconomyCore;
+import com.ghostchu.quickshop.api.obj.QUser;
 import com.ghostchu.quickshop.api.operation.Operation;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
  * Operation for withdraw money from economy.
  */
 public class WithdrawEconomyOperation implements Operation {
-    private final Object account;
+    private final QUser account;
     private final double amount;
     private final EconomyCore economyCore;
     private final World world;
@@ -18,7 +19,7 @@ public class WithdrawEconomyOperation implements Operation {
     private boolean committed = false;
     private boolean rollback = false;
 
-    public WithdrawEconomyOperation(@NotNull Object account, double amount, @NotNull World world, @Nullable String currency, @NotNull EconomyCore economyCore) {
+    public WithdrawEconomyOperation(@NotNull QUser account, double amount, @NotNull World world, @Nullable String currency, @NotNull EconomyCore economyCore) {
         this.account = account;
         this.amount = amount;
         this.world = world;

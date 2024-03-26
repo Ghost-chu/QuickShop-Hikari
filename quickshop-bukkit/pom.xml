@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.ghostchu</groupId>
         <artifactId>quickshop-hikari</artifactId>
-        <version>6.0.0.10</version>
+        <version>6.1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>quickshop-bukkit</artifactId>
@@ -175,7 +175,7 @@
         <dependency>
             <groupId>net.tnemc</groupId>
             <artifactId>EconomyCore</artifactId>
-            <version>0.1.2.8-Pre-1</version>
+            <version>0.1.2.8-Pre-3</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -226,7 +226,7 @@
         <dependency>
             <groupId>net.sourceforge.csvjdbc</groupId>
             <artifactId>csvjdbc</artifactId>
-            <version>1.0.41</version>
+            <version>1.0.42</version>
             <scope>provided</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.dom4j/dom4j -->
@@ -289,6 +289,26 @@
             <groupId>org.encryptor4j</groupId>
             <artifactId>encryptor4j</artifactId>
             <version>0.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>su.nightexpress.core</groupId>
+            <artifactId>NightCore</artifactId>
+            <version>2.5.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/nightcore-2.5.1.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>su.nightexpress.coinsengine</groupId>
+            <artifactId>CoinsEngine</artifactId>
+            <version>2.2.0.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/CoinsEngine-2.2.0.1.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>me.lokka30</groupId>
+            <artifactId>treasury-api</artifactId>
+            <version>2.0.1</version>
+            <scope>provided</scope>
         </dependency>
 <!--        <dependency>-->
 <!--            <groupId>com.mohistmc</groupId>-->

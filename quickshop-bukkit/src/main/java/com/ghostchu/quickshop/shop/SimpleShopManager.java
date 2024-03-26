@@ -236,7 +236,7 @@ public class SimpleShopManager implements ShopManager, Reloadable {
                 .taxAccount(taxAccount)
                 .currency(shop.getCurrency())
                 .world(shop.getLocation().getWorld())
-                .to(buyer);
+                .to(buyerQUser);
         if (shop.isUnlimited() && plugin.getConfig().getBoolean("tax-free-for-unlimited-shop", false)) {
             builder.taxModifier(0.0d);
         }
@@ -450,7 +450,7 @@ public class SimpleShopManager implements ShopManager, Reloadable {
         }
         SimpleEconomyTransaction.SimpleEconomyTransactionBuilder builder = SimpleEconomyTransaction.builder()
                 .core(eco)
-                .from(seller)
+                .from(sellerQUser)
                 .amount(total)
                 .taxModifier(taxModifier)
                 .taxAccount(taxAccount)
@@ -471,7 +471,7 @@ public class SimpleShopManager implements ShopManager, Reloadable {
         if (!transaction.checkBalance()) {
             plugin.text().of(seller, "you-cant-afford-to-buy",
                     format(total, shop.getLocation().getWorld(), shop.getCurrency()),
-                    format(eco.getBalance(seller, shop.getLocation().getWorld(),
+                    format(eco.getBalance(sellerQUser, shop.getLocation().getWorld(),
                                     shop.getCurrency()), shop.getLocation().getWorld(),
                             shop.getCurrency())).send();
             return;
@@ -686,7 +686,7 @@ public class SimpleShopManager implements ShopManager, Reloadable {
                                     .taxAccount(cacheTaxAccount)
                                     .taxModifier(0.0)
                                     .core(plugin.getEconomy())
-                                    .from(p.getUniqueId())
+                                    .from(QUserImpl.createFullFilled(p))
                                     .to(null)
                                     .amount(createCost)
                                     .currency(plugin.getCurrency())
@@ -1753,7 +1753,7 @@ public class SimpleShopManager implements ShopManager, Reloadable {
         }
         // typed 'all', check if player has enough money than price * amount
         double price = shop.getPrice();
-        double balance = eco.getBalance(p.getUniqueId(), shop.getLocation().getWorld(),
+        double balance = eco.getBalance(QUserImpl.createFullFilled(p), shop.getLocation().getWorld(),
                 shop.getCurrency());
         amount = Math.min(amount, (int) Math.floor(balance / price));
         if (amount < 1) { // typed 'all' but the auto set amount is 0

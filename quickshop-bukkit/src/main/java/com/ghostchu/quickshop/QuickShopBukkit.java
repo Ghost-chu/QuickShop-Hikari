@@ -5,7 +5,7 @@ import com.alessiodp.libby.Library;
 import com.alessiodp.libby.LibraryManager;
 import com.alessiodp.libby.logging.adapters.JDKLogAdapter;
 import com.alessiodp.libby.logging.adapters.LogAdapter;
-import com.ghostchu.quickshop.common.util.CommonUtil;
+import com.comphenix.protocol.utility.Util;
 import com.ghostchu.quickshop.common.util.GeoUtil;
 import com.ghostchu.quickshop.platform.Platform;
 import com.ghostchu.quickshop.platform.paper.PaperPlatform;
@@ -17,21 +17,12 @@ import com.ghostchu.quickshop.platform.spigot.v1_19_2.Spigot1193Platform;
 import com.ghostchu.quickshop.platform.spigot.v1_19_3.Spigot1194Platform;
 import com.ghostchu.quickshop.platform.spigot.v1_20_1.Spigot1201Platform;
 import com.ghostchu.quickshop.platform.spigot.v1_20_2.Spigot1202Platform;
-import com.ghostchu.quickshop.platform.spigot.v1_20_2.Spigot1203Platform;
+import com.ghostchu.quickshop.platform.spigot.v1_20_3.Spigot1203Platform;
 import com.ghostchu.quickshop.util.PackageUtil;
 import com.vdurmont.semver4j.Semver;
 import io.papermc.lib.PaperLib;
 import kong.unirest.Unirest;
-import net.kyori.adventure.Adventure;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.platform.viaversion.ViaFacet;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer;
-import net.kyori.adventure.text.serializer.bungeecord.BungeeComponentSerializer;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -48,6 +39,8 @@ import java.util.List;
 import java.util.logging.Level;
 
 public class QuickShopBukkit extends JavaPlugin {
+    @Getter
+    private final java.util.logging.Logger bootstrapLogger = java.util.logging.Logger.getLogger("QuickShop-Hikari/Bootstrap");
     private Platform platform;
     private Logger logger;
     private QuickShop quickShop;
@@ -62,19 +55,20 @@ public class QuickShopBukkit extends JavaPlugin {
 
     @Override
     public void onLoad() {
+        long startLoadAt = System.currentTimeMillis();
         try {
-            getLogger().info("QuickShop-" + getFork() + " - Bootloader");
-            getLogger().info("Bootloader preparing for startup, please stand by...");
-            getLogger().info("Initializing libraries...");
+            bootstrapLogger.info("QuickShop-" + getFork() + " - Bootstrap -> Execute the initialization sequence");
+            bootstrapLogger.info("Bootloader preparing for startup, please wait...");
+            bootstrapLogger.info("Initializing libraries...");
             loadLibraries();
-            getLogger().info("Initializing platform...");
+            bootstrapLogger.info("Initializing platform...");
             loadPlatform();
-            getLogger().info("Boot QuickShop instance...");
+            bootstrapLogger.info("Boot QuickShop instance...");
             initQuickShop();
             // SLF4J now should available
-            logger.info("QuickShop-" + getFork() + " - Booting...");
+            bootstrapLogger.info("QuickShop-" + getFork() + " - Bootstrap -> Complete (" + (System.currentTimeMillis() - startLoadAt) + "ms). Waiting for enable...");
         } catch (Throwable e) {
-            getLogger().log(Level.SEVERE, "Failed to startup the QuickShop-Hikari due unexpected exception!", e);
+            bootstrapLogger.log(Level.SEVERE, "Failed to startup the QuickShop-Hikari due unexpected exception!", e);
             Bukkit.getPluginManager().disablePlugin(this);
             abortLoading = e;
             throw new IllegalStateException("Boot failure", e);
@@ -83,16 +77,17 @@ public class QuickShopBukkit extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        logger.info("Forwarding onDisable() to QuickShop instance...");
+        long shutdownAtTime = System.currentTimeMillis();
+        bootstrapLogger.info("QuickShop-" + getFork() + " - Bootstrap -> Execute the shutdown sequence");
         this.quickShop.onDisable();
-        logger.info("Finishing up onDisable() in Bootloader...");
-        logger.info("Cleaning up resources...");
+        bootstrapLogger.info("Cleaning up resources...");
         HandlerList.unregisterAll(this);
         Bukkit.getScheduler().cancelTasks(this);
         Bukkit.getServicesManager().unregisterAll(this);
         Unirest.shutDown(true);
         Bukkit.getMessenger().unregisterIncomingPluginChannel(this);
         this.platform.shutdown();
+        bootstrapLogger.info("QuickShop-" + getFork() + " - Bootstrap -> All Complete (" + (System.currentTimeMillis() - shutdownAtTime) + "ms)");
     }
 
     @Override
@@ -100,9 +95,10 @@ public class QuickShopBukkit extends JavaPlugin {
         if (abortLoading != null) {
             throw new IllegalStateException("Plugin is disabled due an loading error", abortLoading);
         }
-        logger.info("Forwarding onEnable() to QuickShop instance...");
+        long enableAtTime = System.currentTimeMillis();
+        bootstrapLogger.info("QuickShop-" + getFork() + " - Bootstrap -> Execute the enable sequence");
         this.quickShop.onEnable();
-        logger.info("Finishing up onEnable() in Bootloader...");
+        bootstrapLogger.info("QuickShop-" + getFork() + " - Bootstrap -> All Complete. (" + (System.currentTimeMillis() - enableAtTime) + "ms)");
     }
 
     /**
@@ -123,7 +119,7 @@ public class QuickShopBukkit extends JavaPlugin {
 
     private void resolveLibraries(QuickShopBukkit quickShopBukkit) {
         if (Boolean.parseBoolean(System.getProperty("com.ghostchu.quickshop.QuickShopBukkit.doNotResolveLibraries"))) {
-            getLogger().warning("Warning! You have disabled libraries resolver! Make sure you added libraries in plugin.yml!");
+            bootstrapLogger.warning("Warning! You have disabled libraries resolver! Make sure you added libraries in plugin.yml!");
             return;
         }
 //        LogAdapter adapter = new LogAdapter() {
@@ -137,7 +133,7 @@ public class QuickShopBukkit extends JavaPlugin {
 //                // silent
 //            }
 //        };
-         LogAdapter adapter = new JDKLogAdapter(getLogger());
+        LogAdapter adapter = new JDKLogAdapter(getLogger());
 //        if (Boolean.parseBoolean(System.getProperty("com.ghostchu.quickshop.QuickShopBukkit.verboseLibraryManager"))) {
 //            adapter = new JDKLogAdapter(getLogger());
 //        }
@@ -147,38 +143,51 @@ public class QuickShopBukkit extends JavaPlugin {
         }
         if (!Boolean.parseBoolean(System.getProperty("com.ghostchu.quickshop.QuickShopBukkit.disableSpigotLocal"))) {
             File relative = new File(getDataFolder().getParentFile().getParentFile(), "libraries");
-            if(relative.exists()) {
+            if (relative.exists()) {
                 this.bukkitLibraryManager.addRepository(relative.toPath().toUri().toString());
             }
         }
         if (!Boolean.parseBoolean(System.getProperty("com.ghostchu.quickshop.QuickShopBukkit.disableMirrorTesting"))) {
             GeoUtil.determineBestMirrorServer(getLogger()).forEach(m -> this.bukkitLibraryManager.addRepository(m.getRepoUrl()));
         }
-        this.bukkitLibraryManager.addMavenCentral();
+        //this.bukkitLibraryManager.addMavenCentral();
         this.bukkitLibraryManager.getRepositories().forEach(r -> {
             if (Boolean.parseBoolean(System.getProperty("com.ghostchu.quickshop.QuickShopBukkit.verboseLibraryManager"))) {
-                getLogger().info("Registered repository: " + r);
+                bootstrapLogger.info("Registered repository: " + r);
             }
         });
         try {
             loadLibraries(this.bukkitLibraryManager);
         } catch (IllegalStateException e) {
-            getLogger().log(Level.SEVERE, e.getMessage() + " The startup cannot continue.", e);
+            bootstrapLogger.log(Level.SEVERE, e.getMessage() + " The startup cannot continue.", e);
         }
     }
 
     private void loadLibraries(LibraryManager manager) {
-        try (InputStream stream = getResource("libraries.maven")) {
+        try (InputStream stream = getResource("libraries.maven");) {
             if (stream == null) {
                 throw new IllegalStateException("Jar file doesn't include a valid libraries.maven file");
             }
             String dat = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
             String[] libraries = dat.split("\n");
             List<Library> libraryList = new ArrayList<>();
+            int skipped = 0;
             for (String library : libraries) {
                 if (library.isBlank() || library.startsWith("#") || library.startsWith("//")) continue;
                 library = library.trim();
-                String[] libExplode = library.split(":");
+                String[] cases = library.split("@");
+                String testClass = null;
+                if (cases.length == 2) {
+                    testClass = cases[1];
+                }
+                if (testClass != null) {
+                    if (Util.classExists(testClass) && Boolean.parseBoolean(System.getProperty("com.ghostchu.quickshop.QuickShopBukkit.reuseDependencies", "true"))) {
+                        skipped++;
+                        continue;
+                    }
+                }
+
+                String[] libExplode = cases[0].split(":");
                 if (libExplode.length < 3) {
                     throw new IllegalArgumentException("[" + library + "] not a valid maven dependency syntax");
                 }
@@ -201,13 +210,13 @@ public class QuickShopBukkit extends JavaPlugin {
                 Library lib = libBuilder.build();
                 libraryList.add(lib);
             }
-            getLogger().info("Loading " + libraryList.size() + " libraries...");
+            bootstrapLogger.info("Loading " + libraryList.size() + " libraries (" + skipped + " skipped libraries)...");
             for (int i = 0; i < libraryList.size(); i++) {
                 Library load = libraryList.get(i);
-                getLogger().info("Loading library " + load.toString() + " [" + (i + 1) + "/" + libraryList.size() + "]");
+                bootstrapLogger.info("Loading library " + load.toString() + " [" + (i + 1) + "/" + libraryList.size() + "]");
                 if (Boolean.parseBoolean(System.getProperty("com.ghostchu.quickshop.QuickShopBukkit.verboseLibraryManager"))) {
                     for (String url : load.getUrls()) {
-                        getLogger().info(load + " url selected: " + url);
+                        bootstrapLogger.info(load + " url selected: " + url);
                     }
                 }
                 manager.loadLibrary(load);
@@ -231,12 +240,14 @@ public class QuickShopBukkit extends JavaPlugin {
         try {
             switch (platformId) {
                 case 1 -> {
-                    getLogger().info("Platform detected: Spigot");
-                    getLogger().warning("Use Paper or Paper's fork to get best performance and enhanced features!");
+                    bootstrapLogger.info("Platform detected: Spigot");
+                    bootstrapLogger.warning("Use Paper or Paper's fork to get best performance and enhanced features!");
 
                     initNbtApi();
 
-                    this.platform = switch (AbstractSpigotPlatform.getNMSVersion()) {
+                    //noinspection deprecation
+                    String internalNMSVersion = AbstractSpigotPlatform.getNMSVersion();
+                    this.platform = switch (internalNMSVersion) {
                         case "v1_18_R1" -> new Spigot1181Platform(this);
                         case "v1_18_R2" -> new Spigot1182Platform(this);
                         case "v1_19_R1" -> new Spigot1191Platform(this);
@@ -246,14 +257,14 @@ public class QuickShopBukkit extends JavaPlugin {
                         case "v1_20_R2" -> new Spigot1202Platform(this);
                         case "v1_20_R3" -> new Spigot1203Platform(this);
                         default -> {
-                            getLogger().warning("This server running " + AbstractSpigotPlatform.getNMSVersion() + " not supported by Hikari. (Try update? or Use Paper's fork to get cross-platform compatibility.)");
+                            bootstrapLogger.warning("This server running " + internalNMSVersion + " not supported by Hikari. (Try update? or Use Paper's fork to get cross-platform compatibility.)");
                             Bukkit.getPluginManager().disablePlugin(this);
-                            throw new IllegalStateException("This server running " + AbstractSpigotPlatform.getNMSVersion() + " not supported by Hikari. (Try update? or Use Paper's fork to get cross-platform compatibility.)");
+                            throw new IllegalStateException("This server running " + internalNMSVersion + " not supported by Hikari. (Try update? or Use Paper's fork to get cross-platform compatibility.)");
                         }
                     };
                 }
                 case 2 -> {
-                    getLogger().info("Platform detected: Paper");
+                    bootstrapLogger.info("Platform detected: Paper");
                     this.platform = new PaperPlatform();
                 }
                 default -> throw new UnsupportedOperationException("Unsupported platform");
@@ -263,22 +274,21 @@ public class QuickShopBukkit extends JavaPlugin {
             } catch (Throwable th) {
                 this.logger = LoggerFactory.getLogger(getDescription().getName());
             }
-            logger.info("Platform initialized: {}", this.platform.getClass().getName());
+            logger.info("Slf4jLogger initialized");
+            bootstrapLogger.info("Platform initialized: " + this.platform.getClass().getName());
         } catch (Throwable e) {
             throw new Exception("Failed to initialize the platform", e);
         }
     }
 
     private void initNbtApi() {
-        new NbtApiInitializer(getLogger());
+        new NbtApiInitializer(bootstrapLogger);
     }
 
     private void initQuickShop() {
-        logger.info("Creating QuickShop instance...");
+        bootstrapLogger.info("Creating QuickShop instance...");
         this.quickShop = new QuickShop(this, logger, platform);
-        logger.info("Forwarding onLoad() to QuickShop instance...");
         this.quickShop.onLoad();
-        logger.info("Finishing up onLoad() in Bootloader...");
     }
 
     @NotNull
@@ -317,17 +327,17 @@ public class QuickShopBukkit extends JavaPlugin {
 
     static class UnirestLibLoader {
         public UnirestLibLoader(QuickShopBukkit plugin) {
-            plugin.getLogger().info("Initialing Unirest...");
+            plugin.getBootstrapLogger().info("Initialing Unirest...");
             Unirest.config()
                     .concurrency(10, 5)
                     .setDefaultHeader("User-Agent", "QuickShop/" + plugin.getFork() + "-" + plugin.getDescription().getVersion() + " Java/" + System.getProperty("java.version"));
             Unirest.config().verifySsl(PackageUtil.parsePackageProperly("verifySSL").asBoolean());
             if (PackageUtil.parsePackageProperly("proxyHost").isPresent()) {
-                plugin.getLogger().info("Unirest proxy feature has been enabled.");
+                plugin.getBootstrapLogger().info("Unirest proxy feature has been enabled.");
                 Unirest.config().proxy(PackageUtil.parsePackageProperly("proxyHost").asString("127.0.0.1"), PackageUtil.parsePackageProperly("proxyPort").asInteger(1080));
             }
             if (PackageUtil.parsePackageProperly("proxyUsername").isPresent()) {
-                plugin.getLogger().info("Unirest proxy authentication activated.");
+                plugin.getBootstrapLogger().info("Unirest proxy authentication activated.");
                 Unirest.config().proxy(PackageUtil.parsePackageProperly("proxyHost").asString("127.0.0.1"), PackageUtil.parsePackageProperly("proxyPort").asInteger(1080), PackageUtil.parsePackageProperly("proxyUsername").asString(""), PackageUtil.parsePackageProperly("proxyPassword").asString(""));
             }
         }
@@ -335,17 +345,17 @@ public class QuickShopBukkit extends JavaPlugin {
 
     static class AdventureLibLoader {
         public AdventureLibLoader(QuickShopBukkit plugin) {
-            plugin.getLogger().info("Loading the Adventure Chat Processor...");
-            plugin.getLogger().info("Adventure API loaded from: " + CommonUtil.getClassPath(Adventure.class));
-            plugin.getLogger().info("Adventure Bukkit Platform loaded from: " + CommonUtil.getClassPath(BukkitAudiences.class));
-            plugin.getLogger().info("Adventure Text Serializer (Legacy) loaded from: " + CommonUtil.getClassPath(LegacyComponentSerializer.class));
-            plugin.getLogger().info("Adventure Text Serializer (Gson) loaded from: " + CommonUtil.getClassPath(GsonComponentSerializer.class));
-            plugin.getLogger().info("Adventure Text Serializer (Json) loaded from: " + CommonUtil.getClassPath(JSONComponentSerializer.class));
-            plugin.getLogger().info("Adventure Text Serializer (BungeeChat) loaded from: " + CommonUtil.getClassPath(BungeeComponentSerializer.class));
-            plugin.getLogger().info("Adventure Text Serializer (ViaVersion Facet) loaded from: " + CommonUtil.getClassPath(ViaFacet.class));
-            plugin.getLogger().info("Adventure Text Serializer (ANSI) loaded from: " + CommonUtil.getClassPath(ANSIComponentSerializer.class));
-            plugin.getLogger().info("Adventure Text Serializer (Plain) loaded from: " + CommonUtil.getClassPath(PlainTextComponentSerializer.class));
-            plugin.getLogger().info("Adventure MiniMessage Lib loaded from: " + CommonUtil.getClassPath(MiniMessage.class));
+//            plugin.getBootstrapLogger().info("Loading the Adventure Chat Processor...");
+//            plugin.getBootstrapLogger().info("Adventure API loaded from: " + CommonUtil.getClassPath(Adventure.class));
+//            plugin.getBootstrapLogger().info("Adventure Bukkit Platform loaded from: " + CommonUtil.getClassPath(BukkitAudiences.class));
+//            plugin.getBootstrapLogger().info("Adventure Text Serializer (Legacy) loaded from: " + CommonUtil.getClassPath(LegacyComponentSerializer.class));
+//            plugin.getBootstrapLogger().info("Adventure Text Serializer (Gson) loaded from: " + CommonUtil.getClassPath(GsonComponentSerializer.class));
+//            plugin.getBootstrapLogger().info("Adventure Text Serializer (Json) loaded from: " + CommonUtil.getClassPath(JSONComponentSerializer.class));
+//            plugin.getBootstrapLogger().info("Adventure Text Serializer (BungeeChat) loaded from: " + CommonUtil.getClassPath(BungeeComponentSerializer.class));
+//            plugin.getBootstrapLogger().info("Adventure Text Serializer (ViaVersion Facet) loaded from: " + CommonUtil.getClassPath(ViaFacet.class));
+//            plugin.getBootstrapLogger().info("Adventure Text Serializer (ANSI) loaded from: " + CommonUtil.getClassPath(ANSIComponentSerializer.class));
+//            plugin.getBootstrapLogger().info("Adventure Text Serializer (Plain) loaded from: " + CommonUtil.getClassPath(PlainTextComponentSerializer.class));
+//            plugin.getBootstrapLogger().info("Adventure MiniMessage Lib loaded from: " + CommonUtil.getClassPath(MiniMessage.class));
 
         }
     }

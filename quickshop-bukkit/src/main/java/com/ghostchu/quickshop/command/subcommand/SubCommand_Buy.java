@@ -23,7 +23,7 @@ public class SubCommand_Buy implements CommandHandler<Player> {
         final Shop shop = getLookingShop(sender);
         if (shop != null) {
             if (shop.playerAuthorize(sender.getUniqueId(), BuiltInShopPermission.SET_SHOPTYPE)
-                    || plugin.perm().hasPermission(sender, "quickshop.create.control")) {
+                    || plugin.perm().hasPermission(sender, "quickshop.other.buy")) {
                 shop.setShopType(ShopType.BUYING);
                 shop.setSignText(plugin.text().findRelativeLanguages(sender));
                 plugin.text().of(sender, "command.now-buying", Util.getItemStackName(shop.getItem())).send();

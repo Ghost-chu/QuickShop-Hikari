@@ -51,12 +51,12 @@ quick-fill:
   header: '<yellow>Du hast mehrere Shops mit dem Namem "<green>{0}</green>", wähle einen um fortzufahren:'
   entry-normal: ' <yellow>- <aqua>{0} <light_purple>{1}'
   entry-cooperation: ' <yellow>- <red>[co] <aqua>{0} <light_purple>{1}'
-3rd-plugin-build-check-failed-admin: '<gray>(Nur für Admins) <light_purple>{0}<light_purple> hat die Berechtigungsprüfungen verweigert. Wenn dies nicht beabsichtigt ist, versuche <light_purple>{1}</light_purple> auf die Schwarze Liste der Listener hinzuzufügen. Konfigurationsguide (Auf Englisch): https://github.com/Ghost-chu/QuickShop-Hikari/wiki/Use-Protection-listener-filter'
+3rd-plugin-build-check-failed-admin: '<gray>(Nur für Admins) <light_purple>{0}<dark_gray> hat Berechtigungsprüfungen abgelehnt. Sofern dies nicht gewollt ist, versuch <light_purple>{1} <gray>zur Listener-Blacklist hinzuzufügen. Konfigurations-Anleitung: https://ghost-chu.github.io/QuickShop-Hikari-Documents/docs/modules/shops/protection-checker'
 average-price-nearby: '<green>Durchschnittspreis in der Umgebung: <yellow>{0}'
 inventory-check-global-alert: "<red>[Inventar Prüfung] <gray>Warnung! Ein QuickShop Anzeigeitem <gold>{2}</gold> wurde in einem Inventar bei <aqua>{0}</aqua> <dark_gray>[{1}]</dark_gray> gefunden, was nicht passieren sollte. Dies bedeutet oftmals, dass jemand einen Exploit böswillig ausnutzt um das Anzeigeitem zu duplizieren."
-digits-reach-the-limit: <red>Du hast das Limit an Dezimalstellen im Preis erreicht.
+digits-reach-the-limit: <red>Du hast das Dezimalstellenlimit für den Preis erreicht.
 currency-unset: <green>Shopwährung erfolgreich entfernt. Verwende jetzt Standardeinstellungen.
-you-cant-create-shop-in-there: <red>Du hast keine Berechtigung einen Shop and dieser Position zu erstellen.
+you-cant-create-shop-in-there: <red>Du hast keine Berechtigung einen Shop an dieser Position zu erstellen.
 no-pending-action: <red>Du hast keine ausstehenden Aktionen
 refill-success: <green>Auffüllen erfolgreich
 failed-to-paste: <red>Der Upload zu Pastebin war nicht möglich. Bitte überprüfe deine Internetverbindung und versuche es erneut. (Siehe Konsole für Details)
@@ -444,6 +444,8 @@ command:
     benefit: <yellow>Einstellungen zum aufteilen von Vorteilen zwischen Schobeigentümer und anderen Spielern
     tag: <yellow>Shop-Tags hinzufügen, entfernen oder abfragen
     suggestprice: <yellow>Empfiehlt einen Preis für den angesehenen Shop, basierend auf anderen Shops
+    history: <yellow>View the history transactions of a shop
+    sign: <yellow>Change the sign material of a shop
   bulk-size-not-set: '<red>Verwendung: /qs size <Anzahl>'
   no-type-given: '<red>Verwendung: /qs find <item>'
   feature-not-enabled: Dieses Feature ist nicht in der Config Datei aktiviert.
@@ -649,7 +651,7 @@ transfer-ask: |-
 transferall-ask: |-
   <gold>Schreibe <red>/quickshop transferall accept</red> zum Akzeptieren oder <red>/quickshop transferall deny</red> zum Ablehnen. Die Anfrage wird in <red>{0}</red> Sekunden ablaufen.
 transfer-single-ask: |-
-  <gold>Schreibe <red>/qs transfer accept</red> zum akzeptieren oder <red>/qs transfer deny</red> zum ablehnen.<newline>Die Anfrage wird nach <red>{0}</red> Sekunden ablaufen.
+  <gold>Schreibe <red>/quickshop transferownership accept</red> um zu Akzeptieren und <red>/quickshop transferownership deny</red> um Abzulehnen. Die Anfrage wird nach <red>{0}</red> Sekunden ablaufen.
 transfer-accepted-fromside: <green>Spieler <aqua>{0}</aqua> hat deinen Shop-Übertragungsantrag akzeptiert.
 transfer-accepted-toside: <green>Du hast <aqua>{0}</aqua>'s Tranfer-Anfrage akzeptiert.
 transfer-rejected-fromside: <red>Spieler <aqua>{0}</aqua> hat deine Shop-Übertragungsanfrage abgelehnt.
@@ -1531,5 +1533,5 @@ about:
     - "<aqua>Spendenschlüssel <yellow>>></yellow> <green>{6}</green></aqua>"
     - "<gold>Unterstützt von der Community</gold> <red>Mit ❤ gemacht</red>"
   valid-donation-key: "<color:#00AFF1>Gebunden an <color:#F9C23C>{0}</color></color>"
-  invalid-donation-key: "<gray>Invalid donation key</gra>"
+  invalid-donation-key: "<gray>Ungültiger Spendenschlüssel</gray>"
   kofi-thanks: "<gold>Besonderer Dank geht an alle, welche QuickShop auf Ko-fi unterstützen :)</gold>"

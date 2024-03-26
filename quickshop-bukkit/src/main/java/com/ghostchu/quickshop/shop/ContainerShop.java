@@ -427,9 +427,9 @@ public class ContainerShop implements Shop, Reloadable {
      */
     @Override
     public @Nullable InventoryWrapper getInventory() {
-        if (inventoryWrapper == null) {
+        if (inventoryWrapper == null || inventoryWrapper.isNeedUpdate()) {
             Util.ensureThread(false);
-            Log.debug("SymbolLink Applying: " + symbolLink);
+            Log.debug("Loading inventory from symbol link: " + symbolLink);
             try {
                 inventoryWrapper = locateInventory(symbolLink);
             } catch (Exception e) {
@@ -564,15 +564,7 @@ public class ContainerShop implements Shop, Reloadable {
      */
     @Override
     public void setPrice(double price) {
-        if (this.price == price) {
-            return;
-        }
         Util.ensureThread(false);
-        ShopPriceChangeEvent event = new ShopPriceChangeEvent(this, this.price, price);
-        if (Util.fireCancellableEvent(event)) {
-            Log.debug("A plugin cancelled the price change event.");
-            return;
-        }
         this.price = price;
         setDirty();
         setSignText();

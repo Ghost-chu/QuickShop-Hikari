@@ -1,3 +1,3 @@
 example1:
   example2:
-    test: "This is a test file for testing the REST response of Crowdin distribution feature, please ignore this file!"
+    test: "Dette er en testfil for å teste REST-svaret til Crowdin-distribusjonsfunksjonen, vennligst se bort fra denne filen!"

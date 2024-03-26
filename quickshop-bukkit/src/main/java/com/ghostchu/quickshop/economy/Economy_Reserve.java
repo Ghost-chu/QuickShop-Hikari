@@ -1,7 +1,7 @@
 package com.ghostchu.quickshop.economy;
 
 import com.ghostchu.quickshop.QuickShop;
-import com.ghostchu.quickshop.api.economy.AbstractEconomy;
+import com.ghostchu.quickshop.api.economy.NonSeparateAbstractEconomy;
 import com.ghostchu.quickshop.util.economyformatter.BuiltInEconomyFormatter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -25,7 +25,7 @@ import java.util.UUID;
  */
 @EqualsAndHashCode(callSuper = true)
 @ToString
-public class Economy_Reserve extends AbstractEconomy {
+public class Economy_Reserve extends NonSeparateAbstractEconomy {
 
     private static final String ERROR_MESSAGE =
             "QuickShop received an error when processing Economy response, THIS NOT A QUICKSHOP FAULT, you might need ask help with your Economy Provider plugin author.";

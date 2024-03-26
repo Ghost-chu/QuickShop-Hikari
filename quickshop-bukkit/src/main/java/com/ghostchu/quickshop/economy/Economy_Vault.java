@@ -2,7 +2,7 @@ package com.ghostchu.quickshop.economy;
 
 
 import com.ghostchu.quickshop.QuickShop;
-import com.ghostchu.quickshop.api.economy.AbstractEconomy;
+import com.ghostchu.quickshop.api.economy.NonSeparateAbstractEconomy;
 import com.ghostchu.quickshop.common.util.CommonUtil;
 import com.ghostchu.quickshop.util.economyformatter.BuiltInEconomyFormatter;
 import com.ghostchu.quickshop.util.logger.Log;
@@ -30,7 +30,7 @@ import java.util.logging.Level;
 
 @SuppressWarnings("deprecation")
 @ToString
-public class Economy_Vault extends AbstractEconomy implements Listener {
+public class Economy_Vault extends NonSeparateAbstractEconomy implements Listener {
 
     private static final String ERROR_MESSAGE =
             "QuickShop received an error when processing Economy response, THIS NOT A QUICKSHOP FAULT, you might need ask help with your Economy Provider plugin (%s) author.";

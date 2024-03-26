@@ -51,7 +51,7 @@ quick-fill:
   header: '<yellow>You have multiple shops with name "<green>{0}<yellow>", choose one to continue:'
   entry-normal: ' <yellow>- <aqua>{0} <light_purple>{1}'
   entry-cooperation: ' <yellow>- <red>[совместный] <aqua>{0} <light_purple>{1}'
-3rd-plugin-build-check-failed-admin: '<gray>(Админ) <light_purple>{0} <dark_gray>ошибка при проверке разрешения. Если это не ожидаемое поведение попробуйте добавить <light_purple>{1} <gray>в чёрный список. <gray>Гайд по настройке: https://github.com/Ghost-chu/QuickShop-Hikari/wiki/Use-protection-listener-filter'
+3rd-plugin-build-check-failed-admin: '<gray>(AdminOnly) <light_purple>{0}<dark_gray> denied the permission checks. If this not expected, try adding <light_purple>{1} <gray>to the listener blacklist. Configuration Guide:https://ghost-chu.github.io/QuickShop-Hikari-Documents/docs/modules/shops/protection-checker'
 average-price-nearby: '<green>Средняя цена: <yellow>{0}'
 inventory-check-global-alert: "<red>[Проверка Инвентаря] <gray> Внимание! Найден отображаемый предмет БыстрогоМагазина <gold>{2}</gold> в инвентаре в <aqua>{0}</aqua> <dark_gray>[{1}]</dark_gray>, что не должно было произойти, обычно это значит, что кто-то эксплуатирует уязвимость для дублирования отображаемого предмета."
 digits-reach-the-limit: <red>Вы достигли пределов десятичных знаков в цене.
@@ -650,7 +650,8 @@ transferall-ask: |-
   <gold>Type <red>/quickshop transferall accept</red> to accept or <red>/quickshop transferall deny</red> to deny.
   The request will expire after <red>{0}</red> seconds.
 transfer-single-ask: |-
-  <gold>Type <red>/qs transfer accept</red> to accept.</gold><newline><gold>Type <red>/qs transfer deny</red> to deny.</gold><newline><gold>Request will expire after <red>{0}</red> seconds.
+  <gold>Type <red>/quickshop transferownership accept</red> to accept or <red>/quickshop transferownership deny</red> to deny.
+  The request will expire after <red>{0}</red> seconds.
 transfer-accepted-fromside: <green>Player <aqua>{0}</aqua> accepted your shop transfer request.
 transfer-accepted-toside: <green>You accepted <aqua>{0}</aqua>'s transfer request.
 transfer-rejected-fromside: <red>Player <aqua>{0}</aqua> rejected your shop transfer request.

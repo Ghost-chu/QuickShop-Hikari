@@ -7,6 +7,7 @@ import com.ghostchu.quickshop.api.event.ShopNamingEvent;
 import com.ghostchu.quickshop.api.shop.Shop;
 import com.ghostchu.quickshop.api.shop.permission.BuiltInShopPermission;
 import com.ghostchu.quickshop.economy.SimpleEconomyTransaction;
+import com.ghostchu.quickshop.obj.QUserImpl;
 import com.ghostchu.quickshop.util.Util;
 import com.ghostchu.quickshop.util.logger.Log;
 import org.bukkit.ChatColor;
@@ -60,7 +61,7 @@ public class SubCommand_Name implements CommandHandler<Player> {
             if (!plugin.perm().hasPermission(sender, "quickshop.bypass.namefee")) {
                 transaction = SimpleEconomyTransaction.builder()
                         .world(shop.getLocation().getWorld())
-                        .from(sender.getUniqueId())
+                        .from(QUserImpl.createFullFilled(sender))
                         .to(shop.getTaxAccount())
                         .currency(plugin.getCurrency())
                         .taxAccount(shop.getTaxAccount())

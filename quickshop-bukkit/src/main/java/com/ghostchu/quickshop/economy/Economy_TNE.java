@@ -1,7 +1,7 @@
 package com.ghostchu.quickshop.economy;
 
 import com.ghostchu.quickshop.QuickShop;
-import com.ghostchu.quickshop.api.economy.AbstractEconomy;
+import com.ghostchu.quickshop.api.economy.NonSeparateAbstractEconomy;
 import com.ghostchu.simplereloadlib.ReloadResult;
 import com.ghostchu.simplereloadlib.ReloadStatus;
 import lombok.Getter;
@@ -31,7 +31,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @ToString
-public class Economy_TNE extends AbstractEconomy {
+public class Economy_TNE extends NonSeparateAbstractEconomy {
 
     private final QuickShop plugin;
     private boolean allowLoan;

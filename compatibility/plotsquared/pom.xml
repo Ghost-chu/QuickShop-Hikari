@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.ghostchu</groupId>
         <artifactId>quickshop-hikari</artifactId>
-        <version>6.0.0.10</version>
+        <version>6.1.0.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <groupId>com.ghostchu.quickshop.compatibility</groupId>
@@ -72,7 +72,7 @@
         <dependency>
             <groupId>com.sk89q.worldedit</groupId>
             <artifactId>worldedit-bukkit</artifactId>
-            <version>7.2.18</version>
+            <version>7.2.20</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>

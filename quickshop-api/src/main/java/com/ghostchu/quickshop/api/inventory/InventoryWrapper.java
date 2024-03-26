@@ -118,6 +118,12 @@ public interface InventoryWrapper extends Iterable<ItemStack> {
     }
 
     /**
+     * Do update check, check if inventory-wrapper should discard and re-create via locateSymbolLink
+     * @return should re-locate inventory
+     */
+    boolean isNeedUpdate();
+
+    /**
      * Remove specific items from inventory
      *
      * @param itemStacks items to remove

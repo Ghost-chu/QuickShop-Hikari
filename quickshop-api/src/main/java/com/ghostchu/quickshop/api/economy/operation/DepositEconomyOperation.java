@@ -1,6 +1,7 @@
 package com.ghostchu.quickshop.api.economy.operation;
 
 import com.ghostchu.quickshop.api.economy.EconomyCore;
+import com.ghostchu.quickshop.api.obj.QUser;
 import com.ghostchu.quickshop.api.operation.Operation;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
  * Operation about deposit money.
  */
 public class DepositEconomyOperation implements Operation {
-    private final Object account;
+    private final QUser account;
     private final double amount;
     private final EconomyCore economyCore;
     private final World world;
@@ -18,7 +19,7 @@ public class DepositEconomyOperation implements Operation {
     private boolean committed = false;
     private boolean rollback = false;
 
-    public DepositEconomyOperation(@NotNull Object account, double amount, @NotNull World world, @Nullable String currency, @NotNull EconomyCore economyCore) {
+    public DepositEconomyOperation(@NotNull QUser account, double amount, @NotNull World world, @Nullable String currency, @NotNull EconomyCore economyCore) {
         this.account = account;
         this.amount = amount;
         this.world = world;

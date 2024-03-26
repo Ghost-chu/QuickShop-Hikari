@@ -3,11 +3,13 @@ package com.ghostchu.quickshop.command.subcommand;
 import com.ghostchu.quickshop.QuickShop;
 import com.ghostchu.quickshop.api.command.CommandHandler;
 import com.ghostchu.quickshop.api.command.CommandParser;
+import com.ghostchu.quickshop.api.event.ShopPriceChangeEvent;
 import com.ghostchu.quickshop.api.shop.PriceLimiter;
 import com.ghostchu.quickshop.api.shop.PriceLimiterCheckResult;
 import com.ghostchu.quickshop.api.shop.Shop;
 import com.ghostchu.quickshop.api.shop.permission.BuiltInShopPermission;
 import com.ghostchu.quickshop.economy.SimpleEconomyTransaction;
+import com.ghostchu.quickshop.obj.QUserImpl;
 import com.ghostchu.quickshop.util.MsgUtil;
 import com.ghostchu.quickshop.util.Util;
 import com.ghostchu.quickshop.util.logger.Log;
@@ -98,11 +100,15 @@ public class SubCommand_Price implements CommandHandler<Player> {
                 return;
             }
         }
-
+        ShopPriceChangeEvent event = new ShopPriceChangeEvent(shop, shop.getPrice(), price);
+        if (Util.fireCancellableEvent(event)) {
+            Log.debug("A plugin cancelled the price change event.");
+            return;
+        }
         if (fee > 0) {
             SimpleEconomyTransaction transaction = SimpleEconomyTransaction.builder()
                     .core(plugin.getEconomy())
-                    .from(sender.getUniqueId())
+                    .from(QUserImpl.createFullFilled(sender))
                     .amount(fee)
                     .world(Objects.requireNonNull(shop.getLocation().getWorld()))
                     .currency(plugin.getCurrency())

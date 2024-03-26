@@ -52,7 +52,7 @@ quick-fill:
   header: '<yellow>You have multiple shops with name "<green>{0}</green>", choose one to continue:'
   entry-normal: ' <yellow>- <aqua>{0} <light_purple>{1}'
   entry-cooperation: ' <yellow>- <red>[co] <aqua>{0} <light_purple>{1}'
-3rd-plugin-build-check-failed-admin: '<gray>(AdminOnly) <light_purple>{0}<dark_gray> denied the permission checks. If this not expected, try adding <light_purple>{1} <gray>to the listener blacklist. Configuration Guide: https://github.com/Ghost-chu/QuickShop-Hikari/wiki/Use-protection-listener-filter'
+3rd-plugin-build-check-failed-admin: '<gray>(AdminOnly) <light_purple>{0}<dark_gray> denied the permission checks. If this not expected, try adding <light_purple>{1} <gray>to the listener blacklist. Configuration Guide:https://ghost-chu.github.io/QuickShop-Hikari-Documents/docs/modules/shops/protection-checker'
 average-price-nearby: '<green>Nearby average price: <yellow>{0}'
 inventory-check-global-alert: "<red>[Inventory Check] <gray>Warning! Found a QuickShop display item <gold>{2}</gold> in inventory at <aqua>{0}</aqua> <dark_gray>[{1}]</dark_gray>, which it shouldn't happened, This usually means that someone is maliciously exploiting the exploit to duplicating the display item."
 digits-reach-the-limit: <red>You have reached the limits of decimals in the price.
@@ -455,6 +455,8 @@ command:
     benefit: <yellow>Settings of divide benefits between shop owner and other players
     tag: <yellow>Add, remove or query tags of a shop
     suggestprice: <yellow>Suggest a recommend price for looking shop, based on other shops
+    history: <yellow>View the history transactions of a shop
+    sign: <yellow>Change the sign material of a shop
   bulk-size-not-set: '<red>Usage: /quickshop size \<amount>'
   no-type-given: '<red>Usage: /quickshop find \<item>'
   feature-not-enabled: This feature is not enabled in the config file.
@@ -666,7 +668,7 @@ transferall-ask: |-
   <gold>Type <red>/quickshop transferall accept</red> to accept or <red>/quickshop transferall deny</red> to deny.
   The request will expire after <red>{0}</red> seconds.
 transfer-single-ask: |-
-  <gold>Type <red>/quickshop transfer accept</red> to accept or <red>/quickshop transfer deny</red> to deny.
+  <gold>Type <red>/quickshop transferownership accept</red> to accept or <red>/quickshop transferownership deny</red> to deny.
   The request will expire after <red>{0}</red> seconds.
 transfer-accepted-fromside: <green>Player <aqua>{0}</aqua> accepted your shop transfer request.
 transfer-accepted-toside: <green>You accepted <aqua>{0}</aqua>'s transfer request.

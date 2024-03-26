@@ -63,7 +63,7 @@ public class ShopSuccessPurchaseEvent extends AbstractQSEvent {
      * @return the total money with calculate tax
      */
     public double getBalance() {
-        return this.total * (1 - tax);
+        return this.total - tax;
     }
 
     /**

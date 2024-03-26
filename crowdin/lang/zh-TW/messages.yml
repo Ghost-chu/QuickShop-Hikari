@@ -51,7 +51,7 @@ quick-fill:
   header: '<yellow>你有多個名為「<green>{0}<yellow>」的商店，請選擇一個以繼續：'
   entry-normal: ' <yellow>- <aqua>{0} <light_purple>{1}'
   entry-cooperation: ' <yellow> <red> [co] <aqua> {0} <light_purple> {1}'
-3rd-plugin-build-check-failed-admin: '<gray>（僅限管理員）<light_purple>{0} <dark_gray>拒絕權限檢查。<gray>如果不是預期所見到的，請新增 <light_purple>{1} <gray>進監聽黑名單。<gray>配置指南：https://github.com/Ghost-chu/QuickShop-Hikari/wiki/Use-protection-listener-filter'
+3rd-plugin-build-check-failed-admin: '<gray>(AdminOnly) <light_purple>{0}<dark_gray> denied the permission checks. If this not expected, try adding <light_purple>{1} <gray>to the listener blacklist. Configuration Guide:https://ghost-chu.github.io/QuickShop-Hikari-Documents/docs/modules/shops/protection-checker'
 average-price-nearby: '<green>附近的平均價格：<yellow>{0}'
 inventory-check-global-alert: "<red>[庫存檢查] <gray>警告！找到商店全息顯示<gold>{2}</gold> 在庫存中 <aqua>{0}</aqua> <dark_gray>[{1}]</dark_gray>，這不應該發生，這通常意味著有人惡意利用該漏洞來複製顯示專案。"
 digits-reach-the-limit: <red>你的價格超過小數點後位數上限。
@@ -658,7 +658,8 @@ transfer-ask: |-
 transferall-ask: |-
   <gold>輸入 <red>/qs transferall accept</red> 以接受。</gold><newline><gold>輸入 <red>/qs transferall deny</red> 以拒絕。</gold><newline><gold>請求將在 <red>{0}</red> 秒後過期。
 transfer-single-ask: |-
-  <gold>輸入 <red>/qs transfer accept</red> 以接受。</gold><newline><gold>輸入 <red>/qs transfer deny</red> 以拒絕。</gold><newline><gold>請求將在 <red>{0}</red> 秒後過期。
+  <gold>Type <red>/quickshop transferownership accept</red> to accept or <red>/quickshop transferownership deny</red> to deny.
+  The request will expire after <red>{0}</red> seconds.
 transfer-accepted-fromside: <green>玩家 <aqua>{0}</aqua> 已接受你的商店轉移請求。
 transfer-accepted-toside: <green>你已接受 <aqua>{0}</aqua> 的轉移請求。
 transfer-rejected-fromside: <red>玩家 <aqua>{0}</aqua> 已拒絕你的商店轉移請求。

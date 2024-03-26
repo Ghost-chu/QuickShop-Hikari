@@ -47,14 +47,14 @@ public class BukkitInventoryWrapperManager implements InventoryWrapperManager {
         if (!(block instanceof InventoryHolder holder)) {
             throw new IllegalArgumentException("Invalid symbol link: Target block not a InventoryHolder (map changed/resetted?)");
         }
-        if(holder instanceof DoubleChest doubleChest){
+        if (holder instanceof DoubleChest doubleChest) {
             Location location = doubleChest.getLeftSide().getInventory().getLocation();
             BlockState state = location.getBlock().getState();
-            if(state instanceof InventoryHolder leftSideHolder){
-                return new BukkitInventoryWrapper(leftSideHolder.getInventory());
+            if (state instanceof InventoryHolder leftSideHolder) {
+                return new BukkitInventoryWrapper(leftSideHolder.getInventory(), () -> state.getBlockData().getAsString());
             }
         }
-        return new BukkitInventoryWrapper(holder.getInventory());
+        return new BukkitInventoryWrapper(holder.getInventory(), () -> block.getBlockData().getAsString());
     }
 
     @Deprecated
@@ -86,7 +86,7 @@ public class BukkitInventoryWrapperManager implements InventoryWrapperManager {
                 if (!(block instanceof InventoryHolder holder)) {
                     throw new IllegalArgumentException("Invalid symbol link: Target block not a Container (map changed/resetted?)");
                 }
-                return new BukkitInventoryWrapper(holder.getInventory());
+                return new BukkitInventoryWrapper(holder.getInventory(), () -> ((BlockState) holder).getBlockData().getAsString());
             }
             default -> throw new IllegalArgumentException("Invalid symbol link: Invalid holder type.");
         }

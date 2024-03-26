@@ -31,7 +31,7 @@ safe-mode: <red>QuickShop 现在处于安全模式，您不能打开这个商店
 forbidden-vanilla-behavior: <red>该操作有悖于原版行为，因此已被禁止
 shop-out-of-space-name: <dark_purple>您名为 {0} 的商店已满！
 paste-disabled: |-
-  <red>Paste功能已被禁用！你不能请求技术支持。 
+  <red>Paste功能已被禁用！你不能请求技术支持。
   原因： {0}
 quick-fill:
   entry-own: ' <yellow>- <red>[所有者] <aqua>{0} <light_purple>{1}'
@@ -52,7 +52,7 @@ quick-fill:
   header: '<yellow>您有多个名称为“<green>{0}</green>”的商店，选择其中一个继续：'
   entry-normal: ' <yellow>- <red>{0} <aqua>{1} <light_purple>'
   entry-cooperation: ' <yellow>- <red>[所有者] <aqua>{0} <light_purple>{1}'
-3rd-plugin-build-check-failed-admin: '<gray>(管理员信息) <light_purple>{0} <dark_gray>拒绝了权限检查。如果这不是预期结果，请尝试添加 <light_purple>{1} <gray> 到监听器黑名单中。配置指南：https://ghost-chu.github.io/QuickShop-Hikari-Documents/docs/modules/shops/protection-checker#resolve-the-plugin-conflicting'
+3rd-plugin-build-check-failed-admin: '<gray>(管理员信息) <light_purple>{0} <dark_gray>拒绝了权限检查。如果这不是预期结果，请尝试添加 <light_purple>{1} <gray> 到监听器黑名单中。<gray>配置指南：https://ghost-chu.github.io/QuickShop-Hikari-Documents/docs/modules/shops/protection-checker#resolve-the-plugin-conflicting'
 average-price-nearby: '<green>附近的平均价格： <yellow>{0}'
 inventory-check-global-alert: "<red>[背包检查] <gray>警告！找到QuickShop悬浮物 <gold>{2}</gold> 在背包中 <aqua>{0}</aqua> <dark_gray>[{1}]</dark_gray>，这不应该发生，这通常意味着有人恶意利用漏洞来复制悬浮物。"
 digits-reach-the-limit: <red>您的价格中的小数点后位数超过上限。
@@ -283,7 +283,7 @@ support-disable-reason:
   hot-reload: <yellow>热重载不受支持，请重启服务器并再次检查。
   outdated: <yellow>该版本的QuickShop已过时，在请求帮助之前更新到最新版本！
   bad-hosts: |-
-    <yellow>该服务器 HOSTS 已被修改，QuickShop 的一些功能需要连接到 Mojang API。 
+    <yellow>该服务器 HOSTS 已被修改，QuickShop 的一些功能需要连接到 Mojang API。
     在请求支持之前修复HOSTS, Windows 路径 C:\windows\system32\drivers\et\hosts
     Linux 路径/etc/hosts。
   privacy: <yellow>该服务器在破解（离线）模式下运行。如果你在代理下运行bukkit服务器，并且在代理上的online-mode=true，请正确配置代理相关设置。
@@ -659,7 +659,7 @@ transfer-ask: |-
 transferall-ask: |-
   <gold>输入 <red>/quickshop transferall accept</red> 来接受。</gold><gold>输入 <red>/quickshop transferall deny</red> 来拒绝.</gold><newline><gold>请求将在 <red>{0}</red> 秒后过期。
 transfer-single-ask: |-
-  <gold>输入 <red>/quickshop transfer accept</red> 来接受。</gold><gold>输入 <red>/quickshop transfer deny</red> 来拒绝.</gold><newline><gold>请求将在 <red>{0}</red> 秒后过期。
+  <gold>输入 <red>/quickshop transferownership accept</red> 来接受。</gold><gold>输入 <red>/quickshop transferownership deny</red> 来拒绝.</gold><newline><gold>请求将在 <red>{0}</red> 秒后过期。
 transfer-accepted-fromside: <green>玩家 <aqua>{0}</aqua> 接受了您的商店转移请求。
 transfer-accepted-toside: <green>您接受了 <aqua>{0}</aqua> 的商店转移请求。
 transfer-rejected-fromside: <red>玩家 <aqua>{0}</aqua> 拒绝了您的商店转移请求。

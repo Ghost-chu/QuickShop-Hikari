@@ -1,12 +1,10 @@
 package com.ghostchu.quickshop.api.economy;
 
-import org.bukkit.OfflinePlayer;
+import com.ghostchu.quickshop.api.obj.QUser;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.UUID;
 
 /**
  * @author netherfoam Represents an economy.
@@ -21,40 +19,7 @@ public interface EconomyCore {
      * @param world    The transaction world
      * @return True if success (Should be almost always)
      */
-    boolean deposit(@NotNull Object obj, double amount, @NotNull World world, @Nullable String currency);
-
-    /**
-     * Deposits a given amount of money from thin air to the given username.
-     *
-     * @param name     The exact (case insensitive) username to give money to
-     * @param amount   The amount to give them
-     * @param currency The currency name
-     * @param world    The transaction world
-     * @return True if success (Should be almost always)
-     */
-    boolean deposit(@NotNull String name, double amount, @NotNull World world, @Nullable String currency);
-
-    /**
-     * Deposits a given amount of money from thin air to the given username.
-     *
-     * @param name     The exact (case insensitive) username to give money to
-     * @param amount   The amount to give them
-     * @param currency The currency name
-     * @param world    The transaction world
-     * @return True if success (Should be almost always)
-     */
-    boolean deposit(@NotNull UUID name, double amount, @NotNull World world, @Nullable String currency);
-
-    /**
-     * Deposits a given amount of money from thin air to the given username.
-     *
-     * @param trader   The player to give money to
-     * @param amount   The amount to give them
-     * @param currency The currency name
-     * @param world    The transaction world
-     * @return True if success (Should be almost always)
-     */
-    boolean deposit(@NotNull OfflinePlayer trader, double amount, @NotNull World world, @Nullable String currency);
+    boolean deposit(@NotNull QUser obj, double amount, @NotNull World world, @Nullable String currency);
 
     /**
      * Formats the given number... E.g. 50.5 becomes $50.5 Dollars, or 50 Dollars 5 Cents
@@ -74,37 +39,7 @@ public interface EconomyCore {
      * @param world    The transaction world
      * @return Their current balance.
      */
-    double getBalance(@NotNull Object obj, @NotNull World world, @Nullable String currency);
-
-    /**
-     * Fetches the balance of the given account name
-     *
-     * @param name     The uuid of the account
-     * @param currency The currency name
-     * @param world    The transaction world
-     * @return Their current balance.
-     */
-    double getBalance(@NotNull String name, @NotNull World world, @Nullable String currency);
-
-    /**
-     * Fetches the balance of the given account name
-     *
-     * @param uuid     The uuid of the account
-     * @param currency The currency name
-     * @param world    The transaction world
-     * @return Their current balance.
-     */
-    double getBalance(@NotNull UUID uuid, @NotNull World world, @Nullable String currency);
-
-    /**
-     * Fetches the balance of the given player
-     *
-     * @param player   The name of the account
-     * @param currency The currency name
-     * @param world    The transaction world
-     * @return Their current balance.
-     */
-    double getBalance(@NotNull OfflinePlayer player, @NotNull World world, @Nullable String currency);
+    double getBalance(@NotNull QUser obj, @NotNull World world, @Nullable String currency);
 
     /**
      * Gets the economy processor last error message
@@ -161,33 +96,7 @@ public interface EconomyCore {
      * @param world    The transaction world
      * @return true if success (Payer had enough cash, receiver was able to receive the funds)
      */
-    boolean transfer(@NotNull Object from, @NotNull Object to, double amount, @NotNull World world, @Nullable String currency);
-
-
-    /**
-     * Transfers the given amount of money from Player1 to Player2
-     *
-     * @param from     The player who is paying money
-     * @param to       The player who is receiving money
-     * @param amount   The amount to transfer
-     * @param currency The currency name
-     * @param world    The transaction world
-     * @return true if success (Payer had enough cash, receiver was able to receive the funds)
-     */
-    boolean transfer(@NotNull UUID from, @NotNull UUID to, double amount, @NotNull World world, @Nullable String currency);
-
-    /**
-     * Transfers the given amount of money from Player1 to Player2
-     *
-     * @param from     The player who is paying money
-     * @param to       The player who is receiving money
-     * @param amount   The amount to transfer
-     * @param currency The currency name
-     * @param world    The transaction world
-     * @return true if success (Payer had enough cash, receiver was able to receive the funds)
-     */
-    boolean transfer(@NotNull String from, @NotNull String to, double amount, @NotNull World world, @Nullable String currency);
-
+    boolean transfer(@NotNull QUser from, @NotNull QUser to, double amount, @NotNull World world, @Nullable String currency);
 
     /**
      * Withdraws a given amount of money from the given username and turns it to thin air.
@@ -198,39 +107,6 @@ public interface EconomyCore {
      * @param world    The transaction world
      * @return True if success, false if they didn't have enough cash
      */
-    boolean withdraw(@NotNull Object obj, double amount, @NotNull World world, @Nullable String currency);
-
-    /**
-     * Withdraws a given amount of money from the given username and turns it to thin air.
-     *
-     * @param name     The exact (case insensitive) username to take money from
-     * @param amount   The amount to take from them
-     * @param currency The currency name
-     * @param world    The transaction world
-     * @return True if success, false if they didn't have enough cash
-     */
-    boolean withdraw(@NotNull String name, double amount, @NotNull World world, @Nullable String currency);
-
-    /**
-     * Withdraws a given amount of money from the given username and turns it to thin air.
-     *
-     * @param name     The exact (case insensitive) username to take money from
-     * @param amount   The amount to take from them
-     * @param currency The currency name
-     * @param world    The transaction world
-     * @return True if success, false if they didn't have enough cash
-     */
-    boolean withdraw(@NotNull UUID name, double amount, @NotNull World world, @Nullable String currency);
-
-    /**
-     * Withdraws a given amount of money from the given username and turns it to thin air.
-     *
-     * @param trader   The player to take money from
-     * @param amount   The amount to take from them
-     * @param currency The currency name
-     * @param world    The transaction world
-     * @return True if success, false if they didn't have enough cash
-     */
-    boolean withdraw(@NotNull OfflinePlayer trader, double amount, @NotNull World world, @Nullable String currency);
+    boolean withdraw(@NotNull QUser obj, double amount, @NotNull World world, @Nullable String currency);
 
 }

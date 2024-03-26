@@ -113,3 +113,5 @@ buildNumber.properties
 run/
 /build-artifacts/
 /.vscode/settings.json
+/.run
+.run

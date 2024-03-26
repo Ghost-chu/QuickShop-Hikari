@@ -1,5 +1,6 @@
 package com.ghostchu.quickshop.api.economy;
 
+import com.ghostchu.quickshop.api.obj.QUser;
 import com.ghostchu.quickshop.api.operation.Operation;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
@@ -56,9 +57,9 @@ public interface EconomyTransaction {
 
     void setCurrency(@Nullable String currency);
 
-    @Nullable Object getFrom();
+    @Nullable QUser getFrom();
 
-    void setFrom(@Nullable Object from);
+    void setFrom(@Nullable QUser from);
 
     @Nullable String getLastError();
 
@@ -75,13 +76,13 @@ public interface EconomyTransaction {
 
     void setTax(double tax);
 
-    @Nullable Object getTaxer();
+    @Nullable QUser getTaxer();
 
-    void setTaxer(@Nullable Object taxer);
+    void setTaxer(@Nullable QUser taxer);
 
-    @Nullable Object getTo();
+    @Nullable QUser getTo();
 
-    void setTo(@Nullable Object to);
+    void setTo(@Nullable QUser to);
 
     @NotNull World getWorld();
 

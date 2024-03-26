@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 public class SimpleRegistryManager implements RegistryManager {
-    private Map<String, Registry> registryList = new ConcurrentSkipListMap<>();
+    private final Map<String, Registry> REGISTRY_LIST = new ConcurrentSkipListMap<>();
 
     @Override
     public Registry getRegistry(BuiltInRegistry registry) {
@@ -19,30 +19,30 @@ public class SimpleRegistryManager implements RegistryManager {
 
     @Override
     public Registry getRegistry(String registryName) {
-        return registryList.get(registryName);
+        return REGISTRY_LIST.get(registryName);
     }
 
     @Override
     public Map<String, Registry> getRegistryList() {
-        return ImmutableMap.copyOf(registryList);
+        return ImmutableMap.copyOf(REGISTRY_LIST);
     }
 
     @Override
     public void registerRegistry(String namespacedName, Registry registry) {
-        if (registryList.get(namespacedName) != null) {
+        if (REGISTRY_LIST.get(namespacedName) != null) {
             throw new IllegalArgumentException("Registry " + namespacedName + " already registered in RegistryManager!");
         }
-        this.registryList.put(namespacedName, registry);
+        this.REGISTRY_LIST.put(namespacedName, registry);
     }
 
     @Override
     public void unregisterRegistry(String namespacedName) {
-        this.registryList.remove(namespacedName);
+        this.REGISTRY_LIST.remove(namespacedName);
     }
 
     @Override
     @NotNull
     public Map<String, Registry> getRegistries() {
-        return ImmutableMap.copyOf(registryList);
+        return ImmutableMap.copyOf(REGISTRY_LIST);
     }
 }

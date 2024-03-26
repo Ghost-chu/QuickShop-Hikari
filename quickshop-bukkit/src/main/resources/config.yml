@@ -1,7 +1,7 @@
 # QuickShop-Hikari Plugin Configuration
 
 #Do not touch this if you don't know what you're doing!
-config-version: 1027
+config-version: 1028
 
 #Set the default language code the plugin should use
 #Set it to default will use your system language.
@@ -22,7 +22,6 @@ enabled-languages:
 #We will get those files from mojang resources server:
 #0=Official
 #1=BMCLAPI (Unofficial China Mirror, https://bmclapidoc.bangbang93.com)
-#2=MCBBSMirror (Another OpenBMCLAPI Mirror, https://www.mcbbs.net)
 #You can choose which one you want to use for downloading resources.
 #By default, QuickShop use Mojang official server to downloading resources.
 mojangapi-mirror: 0
@@ -96,6 +95,8 @@ include-offlineplayer-list: false
 #0=Vault
 #3=GemsEconomy with Multi-Currency on
 #4=TNE with Multi-Currency on
+#5=CoinsEngine with Multi-Currency on (experimental)
+#6=Treasury with Multi-Currency on (experimental)
 #DO NOT TOUCH THIS IF YOU DON'T KNOW WHAT IT DOES. ASK FOR SUPPORT BEFORE TOUCHING THIS!
 economy-type: 0
 
@@ -111,14 +112,6 @@ send-display-item-protection-alert: false
 
 #Allow QuickShop to send alerts when someone tries to steal from a shop.
 send-shop-protection-alert: false
-
-#Still WIP
-server-platform: 0
-
-#Select which chat system QuickShop should use.
-#0=BungeeChat (Spigot default)
-#1=Adventure (Removed In Current Version)
-chat-type: 0
 
 #MySQL database settings.
 database:
@@ -168,9 +161,8 @@ limits:
   #Here you can bind the limit to specific permissions.
   #Using the same format, you can add as many as you want!
   ranks:
-    quickshop:
-      #Players with quickshop.example permission can create 20 shops.
-      example: 20
+    #Players with quickshop.example permission can create 20 shops.
+    quickshop.example: 20
 
 #The list of blocks that can be used to create shops.
 #By default, chests are added to this list.

@@ -34,6 +34,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.apache.commons.compress.archivers.zip.ZipFile;
+import org.apache.commons.lang3.LocaleUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -50,9 +51,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.text.NumberFormat;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -175,10 +178,10 @@ public class SimpleTextManager implements TextManager, Reloadable, SubPasteItem 
         if (PackageUtil.parsePackageProperly("betaForceReplaceFillerProcessor").asBoolean(false)) {
             postProcessors.add(new ForceReplaceFillerProcessor());
         }
-        if(PackageUtil.parsePackageProperly("usePAPIPostProcess").asBoolean(true)) {
+        if (PackageUtil.parsePackageProperly("usePAPIPostProcess").asBoolean(true)) {
             postProcessors.add(new PlaceHolderApiProcessor());
         }
-        if(PackageUtil.parsePackageProperly("fixClientItemTextRenderAlwaysItalic").asBoolean(true)) {
+        if (PackageUtil.parsePackageProperly("fixClientItemTextRenderAlwaysItalic").asBoolean(true)) {
             postProcessors.add(new FixClientItemItalicRenderProcessor());
         }
 
@@ -389,7 +392,7 @@ public class SimpleTextManager implements TextManager, Reloadable, SubPasteItem 
     public ProxiedLocale findRelativeLanguages(@Nullable String langCode) {
         //langCode may null when some plugins providing fake player
         if (langCode == null || langCode.isEmpty()) {
-            return new ProxiedLocale(langCode, DEFAULT_LOCALE);
+            return new ProxiedLocale(langCode, DEFAULT_LOCALE, NumberFormat.getCompactNumberInstance(Locale.US, NumberFormat.Style.SHORT), Locale.ROOT);
         }
         String result = languagesCache.getIfPresent(langCode);
         if (result == null) {
@@ -414,7 +417,21 @@ public class SimpleTextManager implements TextManager, Reloadable, SubPasteItem 
             Log.debug("Registering relative language " + langCode + " to " + result);
             languagesCache.put(langCode, result);
         }
-        return new ProxiedLocale(langCode, result);
+
+
+        String[] resultCode = result.split("_");
+        Locale locale = Locale.ROOT;
+        try {
+            if (resultCode.length == 2) {
+                locale = LocaleUtils.toLocale(resultCode[0] + "_" + resultCode[1].toUpperCase(Locale.ROOT));
+            } else {
+                locale = LocaleUtils.toLocale(result);
+            }
+        } catch (IllegalArgumentException e) {
+            Log.debug(Level.WARNING, "Failed to solve the player locale: " + locale + ": " + e.getMessage());
+        }
+
+        return new ProxiedLocale(langCode, result, NumberFormat.getCompactNumberInstance(locale, NumberFormat.Style.SHORT), locale);
     }
 
     /**
@@ -817,10 +834,10 @@ public class SimpleTextManager implements TextManager, Reloadable, SubPasteItem 
             return text.stream().map(this::postProcess).toList();
         }
 
-        private Component postProcess(Component component){
+        private Component postProcess(Component component) {
             for (PostProcessor postProcessor : this.manager.postProcessors) {
                 try {
-                component = postProcessor.process(component,sender,args);
+                    component = postProcessor.process(component, sender, args);
                 } catch (Throwable th) {
                     Log.debug("Failed to post processing text: " + component + " caused by " + th.getMessage() + " handler: " + postProcessor.getClass().getName());
                 }

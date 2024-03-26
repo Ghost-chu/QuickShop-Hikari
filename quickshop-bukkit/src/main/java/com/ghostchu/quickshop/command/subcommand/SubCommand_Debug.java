@@ -30,7 +30,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class SubCommand_Debug implements CommandHandler<CommandSender> {
 
@@ -60,7 +63,6 @@ public class SubCommand_Debug implements CommandHandler<CommandSender> {
             case "toggle-shop-load-status" -> handleShopLoading(sender, subParams);
             case "check-shop-debug" -> handleShopInfo(sender, subParams);
             case "set-property" -> handleProperty(sender, subParams);
-            case "await-profile-io-tasks" -> handleProfileIOTasksInfo(sender, subParams);
             case "reset-shop-caches" -> handleShopCacheResetting(sender, subParams);
             case "reset-dbmanager" -> handleDbManagerReset(sender, subParams);
             case "dump-db-connections" -> handleDumpDbConnections(sender, subParams);
@@ -167,57 +169,6 @@ public class SubCommand_Debug implements CommandHandler<CommandSender> {
         SimpleShopCache simpleShopCache = (SimpleShopCache) shopManager.getShopCache();
         simpleShopCache.getCaches().values().forEach(Cache::invalidateAll);
         sender.sendMessage("Cleared!");
-    }
-
-    private void handleProfileIOTasksInfo(CommandSender sender, List<String> subParams) {
-        if (subParams.isEmpty()) {
-            sender.sendMessage("ERROR! Usage: /quickshop debug await-profile-io-tasks <target> <action>");
-            return;
-        }
-        if (subParams.size() < 2) {
-            sender.sendMessage("ERROR! Usage: /quickshop debug await-profile-io-tasks <target> <action>");
-            return;
-        }
-        ExecutorService executorService;
-        BlockingQueue<Runnable> queue;
-        switch (subParams.get(0)) {
-            case "PRIMARY" -> {
-                executorService = QuickExecutor.getPrimaryProfileIoExecutor();
-                queue = QuickExecutor.getPrimaryProfileIoQueue();
-            }
-            case "SECONDARY" -> {
-                executorService = QuickExecutor.getSecondaryProfileIoExecutor();
-                queue = QuickExecutor.getSecondaryProfileIoQueue();
-            }
-            default -> {
-                sender.sendMessage("Target only accepts: PRIMARY, SECONDARY");
-                return;
-            }
-        }
-        switch (subParams.get(1)) {
-            case "info" -> {
-                int count = 0;
-                for (Runnable runnable : queue) {
-                    count++;
-                    sender.sendMessage(count + ". " + runnable.toString());
-                }
-                sender.sendMessage("Total tasks in queue: " + count);
-            }
-            case "reset" -> {
-                List<Runnable> remains = executorService.shutdownNow();
-                sender.sendMessage("Killed executor service with " + remains.size() + " unfinished tasks.");
-                switch (subParams.get(0)) {
-                    case "PRIMARY" ->
-                            QuickExecutor.setPrimaryProfileIoExecutor(new ThreadPoolExecutor(2, 32, 60L, TimeUnit.SECONDS, queue));
-                    case "SECONDARY" ->
-                            QuickExecutor.setSecondaryProfileIoExecutor(new ThreadPoolExecutor(2, 32, 60L, TimeUnit.SECONDS, queue));
-                    default -> {
-                    }
-                }
-                sender.sendMessage("Successfully re-launched executor service with 2 min, 32 max, 60sec K.A.T., unlimited capacity.");
-            }
-        }
-
     }
 
     private void handleProperty(CommandSender sender, List<String> subParams) {

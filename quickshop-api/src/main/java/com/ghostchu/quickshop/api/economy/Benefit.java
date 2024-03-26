@@ -1,9 +1,9 @@
 package com.ghostchu.quickshop.api.economy;
 
+import com.ghostchu.quickshop.api.obj.QUser;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
-import java.util.UUID;
 
 public interface Benefit {
     /**
@@ -17,19 +17,19 @@ public interface Benefit {
     /**
      * Add a benefit to this ShopBenefit registry
      *
-     * @param player  The player unique id
+     * @param user  The QUser obj
      * @param benefit The benefit percentage (1.0d = 100%)
      * @throws BenefitOverflowException If benefit overflowed after added
      * @throws BenefitExistsException   If benefit already exists
      */
-    void addBenefit(@NotNull UUID player, double benefit) throws BenefitOverflowException, BenefitExistsException;
+    void addBenefit(@NotNull QUser user, double benefit) throws BenefitOverflowException, BenefitExistsException;
 
     /**
      * Remove a benefit from this Benefit registry
      *
-     * @param player The player unique id
+     * @param user The QUser obj
      */
-    void removeBenefit(@NotNull UUID player);
+    void removeBenefit(@NotNull QUser user);
 
     /**
      * Gets a benefit registry copy
@@ -37,7 +37,7 @@ public interface Benefit {
      * @return Benefit registry copy
      */
     @NotNull
-    Map<UUID, Double> getRegistry();
+    Map<QUser, Double> getRegistry();
 
     /**
      * Checks if this shop has benefit registered.
