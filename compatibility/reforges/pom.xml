@@ -69,7 +69,7 @@
         <dependency>
             <groupId>com.willfp</groupId>
             <artifactId>Reforges</artifactId>
-            <version>6.55.3</version>
+            <version>6.55.5</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
