@@ -69,7 +69,7 @@
         <dependency>
             <groupId>com.github.angeschossen</groupId>
             <artifactId>ChestProtectAPI</artifactId>
-            <version>5.15.0</version>
+            <version>5.17.2</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
